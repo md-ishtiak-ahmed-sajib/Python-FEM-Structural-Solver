@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "python-fem-structural-solver"
+version = "0.1.0"
+description = "Local structural FEM with clear calculations and repeatable beam stiffness studies"
+requires-python = ">=3.12"
+dependencies = ["numpy>=2.0,<3", "scipy>=1.14,<2"]
+
+[project.urls]
+Repository = "https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver"
+Documentation = "https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver#readme"
+
+[project.optional-dependencies]
+app = ["streamlit>=1.45,<2", "plotly>=6,<7", "matplotlib>=3.9,<4"]
+dev = ["pytest>=8,<10", "ruff>=0.11", "mypy>=1.15", "build>=1.2"]
+reference = ["openseespy>=3.7"]
+
+[project.scripts]
+fem-solver = "fem_solver.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+fem_solver = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+files = ["src/fem_solver"]
+check_untyped_defs = true
+ignore_missing_imports = true

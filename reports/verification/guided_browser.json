@@ -1,0 +1,26 @@
+{
+  "checked_on": "2026-09-01",
+  "scope": "Local Codex in-app browser review of the guided Streamlit application. Numerical tests are recorded separately.",
+  "origin": "http://127.0.0.1:8501/",
+  "viewport_css_pixels": {"width": 756, "height": 698},
+  "observed": [
+    "Define saved and checked the axial bar without presenting a solution; input-valid and stability checks were distinguished.",
+    "Understand displayed eight method steps, actual member properties, DOF maps, element matrices and constrained equations before solving.",
+    "Solve required its explicit button, then displayed movements, diagrams, analytical comparison, balance checks and limitations.",
+    "The applied-load multiplier comparison completed; releasing A:ux showed an unstable-model failure and kept the baseline.",
+    "The learning report download control was exercised. Standalone reports for bar, truss, beam and frame were regenerated and opened locally; each rendered its embedded Plotly figure, readable nodal/comparison/member tables and no external script or stylesheet links.",
+    "The stiffness study displayed synthetic labels, estimates, prediction error, readable uncertainty ranges and model-assumption caveats.",
+    "The glossary displayed searchable terms and plain-English explanations. The standalone stiffness report rendered estimates, units, uncertainty, diagnostic meanings, warnings and its raw reproduction record.",
+    "Hover showed a definition without opening the native disclosure. Focus displayed its own definition without pointer hover. Pointer activation opened a disclosure.",
+    "The tooltip panel remained inside the narrow window. The hover-inside-closed-details bug and overlapping open/focused definitions were fixed."
+  ],
+  "remaining_review": [
+    "Full keyboard-only navigation and Enter/Space activation could not be confirmed through the browser tool; focus visibility was confirmed.",
+    "No physical touchscreen or screen-reader review was performed.",
+    "No full OS network-outage test was performed; automated app tests block Python socket access.",
+    "All four family workflows are covered by automated app tests. This browser review used the axial bar for the full three-stage route."
+  ],
+  "physical_validation": "pending actual measurements",
+  "external_reproduction": "not recorded",
+  "public_release": "not performed"
+}

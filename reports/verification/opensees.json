@@ -1,0 +1,64 @@
+{
+  "reference": "OpenSeesPy",
+  "OpenSees_engine_version": "3.8.0",
+  "provenance": "independent numerical comparison",
+  "note": "Displacements include m/rad and reactions N/Nm; mixed-component maxima are descriptive, not normalized physical norms.",
+  "cases": [
+    {
+      "case": "Portal frame",
+      "status": "passed",
+      "max_displacement_absolute_error": 1.196959198423997e-16,
+      "max_constraint_reaction_absolute_error": 9.822542779147625e-11
+    },
+    {
+      "case": "Triangular truss",
+      "status": "passed",
+      "max_displacement_absolute_error": 6.776263578034403e-21,
+      "max_constraint_reaction_absolute_error": 1.8189894035458565e-12
+    },
+    {
+      "case": "Cantilever beam",
+      "status": "passed",
+      "max_displacement_absolute_error": 8.673617379884035e-19,
+      "max_constraint_reaction_absolute_error": 9.094947017729282e-13
+    },
+    {
+      "case": "Axial bar",
+      "status": "passed",
+      "max_displacement_absolute_error": 0.0,
+      "max_constraint_reaction_absolute_error": 0.0
+    },
+    {
+      "case": "Beam with rotational support spring",
+      "status": "passed",
+      "max_displacement_absolute_error": 3.469446951953614e-18,
+      "max_constraint_reaction_absolute_error": 1.3642420526593924e-12
+    }
+  ],
+  "timoshenko": [
+    {
+      "slenderness": 10,
+      "analytical_m": 2.87942857142857e-06,
+      "OpenSees_m": 2.8794285714285693e-06,
+      "relative_error": 3.3306690738754696e-16
+    },
+    {
+      "slenderness": 20,
+      "analytical_m": 2.2901714285714275e-05,
+      "OpenSees_m": 2.2901714285714292e-05,
+      "relative_error": 6.661338147750939e-16
+    },
+    {
+      "slenderness": 50,
+      "analytical_m": 0.00035725428571428566,
+      "OpenSees_m": 0.00035725428571428556,
+      "relative_error": 3.3306690738754696e-16
+    },
+    {
+      "slenderness": 100,
+      "analytical_m": 0.0028573657142857136,
+      "OpenSees_m": 0.0028573657142857136,
+      "relative_error": 0.0
+    }
+  ]
+}

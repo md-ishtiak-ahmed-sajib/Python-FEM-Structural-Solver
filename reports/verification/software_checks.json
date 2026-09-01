@@ -1,0 +1,49 @@
+{
+  "checked_at_utc": "2026-09-01T00:23:31.727967+00:00",
+  "python": "3.12.10",
+  "platform": "Windows",
+  "checks": [
+    {
+      "command": "python scripts/check_docs.py",
+      "exit_code": 0,
+      "status": "passed"
+    },
+    {
+      "command": "python scripts/build_learning_docs.py --check",
+      "exit_code": 0,
+      "status": "passed"
+    },
+    {
+      "command": "python -m pytest -q --junitxml=results/pytest.xml",
+      "exit_code": 0,
+      "status": "passed"
+    },
+    {
+      "command": "python -m ruff check .",
+      "exit_code": 0,
+      "status": "passed"
+    },
+    {
+      "command": "python -m ruff format --check .",
+      "exit_code": 0,
+      "status": "passed"
+    },
+    {
+      "command": "python -m mypy src",
+      "exit_code": 0,
+      "status": "passed"
+    },
+    {
+      "command": "python -m pip check",
+      "exit_code": 0,
+      "status": "passed"
+    },
+    {
+      "command": "python -m build",
+      "exit_code": 0,
+      "status": "passed"
+    }
+  ],
+  "core_source_sha256": "f9ba8f4d6a1af2a44fb3416d89b6f5663e9951a5f502ef54f9f7d705d4e18e02",
+  "evidence_scope": "Local automated software verification only. Not physical validation or independent-person reproduction."
+}

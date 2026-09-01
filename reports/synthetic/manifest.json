@@ -1,0 +1,13 @@
+{
+  "provenance": "synthetic",
+  "seed": 2027,
+  "trials_per_configuration": 200,
+  "configurations": 2304,
+  "planned_fit_trials": 460800,
+  "estimated_fit_trials": 422400,
+  "unidentifiable_configurations": 192,
+  "quick": false,
+  "noise_scale": "Euler-Bernoulli tip movement under a unit tip force for the same EI and clamp",
+  "uncertainty": "Independent Gaussian movement noise; geometry and force are exact. No comparison with real measurements is claimed.",
+  "note": "A unit force only scales this linear calculation. It is not a suggested bench load."
+}

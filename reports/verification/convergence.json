@@ -1,0 +1,26 @@
+{
+  "field": "unenriched Hermite displacement",
+  "note": "The exported field includes an exact uniform-load correction for this constant-section beam.",
+  "results": [
+    {
+      "elements": 1,
+      "relative_L2_Hermite_error": 0.02620598702993901
+    },
+    {
+      "elements": 2,
+      "relative_L2_Hermite_error": 0.0016379273395285116
+    },
+    {
+      "elements": 4,
+      "relative_L2_Hermite_error": 0.00010237128924471547
+    },
+    {
+      "elements": 8,
+      "relative_L2_Hermite_error": 6.398218603163804e-06
+    },
+    {
+      "elements": 16,
+      "relative_L2_Hermite_error": 3.998892896425802e-07
+    }
+  ]
+}

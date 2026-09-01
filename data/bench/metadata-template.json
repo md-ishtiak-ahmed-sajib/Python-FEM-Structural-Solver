@@ -1,0 +1,21 @@
+{
+  "provenance": "measured",
+  "specimen": {
+    "description": "",
+    "free_length_m": null,
+    "width_m": null,
+    "depth_m": null
+  },
+  "fixture": {
+    "description": "",
+    "translation_check": ""
+  },
+  "instrument": {
+    "description": "",
+    "resolution_m": null,
+    "calibration_record": ""
+  },
+  "load_calibration": "",
+  "uncertainty_method": "",
+  "processing_notes": ""
+}

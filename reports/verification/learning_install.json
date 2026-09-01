@@ -1,0 +1,39 @@
+{
+  "checked_at_utc": "2026-09-01T00:23:39.292905+00:00",
+  "scope": "Local wheel installation: core and UI-independent learning helpers. No physical experiment or separate-environment browser test.",
+  "python": "3.12.10",
+  "solver": "0.1.0",
+  "numpy": "2.5.2",
+  "scipy": "1.18.1",
+  "families": [
+    {
+      "family": "frame",
+      "example": "Portal frame",
+      "status": "passed"
+    },
+    {
+      "family": "truss",
+      "example": "Triangular truss",
+      "status": "passed"
+    },
+    {
+      "family": "beam",
+      "example": "Cantilever beam",
+      "status": "passed"
+    },
+    {
+      "family": "bar",
+      "example": "Axial bar",
+      "status": "passed"
+    }
+  ],
+  "checks": [
+    "solve",
+    "balance discussion",
+    "project round trip",
+    "learning report with readable member table and local glossary",
+    "readable identification report"
+  ],
+  "synthetic_identification": "passed, including reserved predictions",
+  "terminology_entries": 99
+}

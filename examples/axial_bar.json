@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "units": "N-m-Pa",
+  "materials": [
+    {
+      "id": "steel",
+      "E": 200000000000.0
+    }
+  ],
+  "sections": [
+    {
+      "id": "section",
+      "A": 0.003,
+      "I": 8e-06,
+      "c": 0.08
+    }
+  ],
+  "kind": "bar",
+  "title": "Axial bar",
+  "nodes": [
+    {
+      "id": "A",
+      "x": 0
+    },
+    {
+      "id": "B",
+      "x": 2
+    }
+  ],
+  "elements": [
+    {
+      "id": "AB",
+      "start": "A",
+      "end": "B",
+      "material": "steel",
+      "section": "section"
+    }
+  ],
+  "constraints": [
+    {
+      "node": "A",
+      "dof": "ux",
+      "value": 0.0
+    }
+  ],
+  "loads": [
+    {
+      "node": "B",
+      "dof": "ux",
+      "value": 10000
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "units": "N-m-Pa",
+  "materials": [
+    {
+      "id": "steel",
+      "E": 200000000000.0
+    }
+  ],
+  "sections": [
+    {
+      "id": "section",
+      "A": 0.003,
+      "I": 8e-06,
+      "c": 0.08
+    }
+  ],
+  "kind": "truss",
+  "title": "Triangular truss",
+  "nodes": [
+    {
+      "id": "A",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "id": "B",
+      "x": 4,
+      "y": 0
+    },
+    {
+      "id": "C",
+      "x": 2,
+      "y": 3
+    }
+  ],
+  "elements": [
+    {
+      "id": "AB",
+      "start": "A",
+      "end": "B",
+      "material": "steel",
+      "section": "section"
+    },
+    {
+      "id": "AC",
+      "start": "A",
+      "end": "C",
+      "material": "steel",
+      "section": "section"
+    },
+    {
+      "id": "BC",
+      "start": "B",
+      "end": "C",
+      "material": "steel",
+      "section": "section"
+    }
+  ],
+  "constraints": [
+    {
+      "node": "A",
+      "dof": "ux",
+      "value": 0.0
+    },
+    {
+      "node": "A",
+      "dof": "uy",
+      "value": 0.0
+    },
+    {
+      "node": "B",
+      "dof": "uy",
+      "value": 0.0
+    }
+  ],
+  "loads": [
+    {
+      "node": "C",
+      "dof": "uy",
+      "value": -20000
+    }
+  ]
+}

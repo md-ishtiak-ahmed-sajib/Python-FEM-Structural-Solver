@@ -1,0 +1,16 @@
+.venv/
+.reference-venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+results/
+data/bench/*
+!data/bench/*-template.csv
+!data/bench/*-template.json
+.env
+.DS_Store

@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "units": "N-m-Pa",
+  "materials": [
+    {
+      "id": "steel",
+      "E": 200000000000.0
+    }
+  ],
+  "sections": [
+    {
+      "id": "section",
+      "A": 0.003,
+      "I": 8e-06,
+      "c": 0.08
+    }
+  ],
+  "kind": "frame",
+  "title": "Portal frame",
+  "nodes": [
+    {
+      "id": "A",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "id": "B",
+      "x": 0,
+      "y": 3
+    },
+    {
+      "id": "C",
+      "x": 4,
+      "y": 3
+    },
+    {
+      "id": "D",
+      "x": 4,
+      "y": 0
+    }
+  ],
+  "elements": [
+    {
+      "id": "AB",
+      "start": "A",
+      "end": "B",
+      "material": "steel",
+      "section": "section"
+    },
+    {
+      "id": "BC",
+      "start": "B",
+      "end": "C",
+      "material": "steel",
+      "section": "section"
+    },
+    {
+      "id": "DC",
+      "start": "D",
+      "end": "C",
+      "material": "steel",
+      "section": "section"
+    }
+  ],
+  "constraints": [
+    {
+      "node": "A",
+      "dof": "ux",
+      "value": 0.0
+    },
+    {
+      "node": "A",
+      "dof": "uy",
+      "value": 0.0
+    },
+    {
+      "node": "A",
+      "dof": "rz",
+      "value": 0.0
+    },
+    {
+      "node": "D",
+      "dof": "ux",
+      "value": 0.0
+    },
+    {
+      "node": "D",
+      "dof": "uy",
+      "value": 0.0
+    },
+    {
+      "node": "D",
+      "dof": "rz",
+      "value": 0.0
+    }
+  ],
+  "loads": [
+    {
+      "node": "B",
+      "dof": "ux",
+      "value": 5000
+    }
+  ],
+  "distributed_loads": [
+    {
+      "element": "BC",
+      "qy": -3000
+    }
+  ]
+}

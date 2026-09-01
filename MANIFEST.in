@@ -1,0 +1,10 @@
+include README.md LICENSE CITATION.cff
+include .gitignore
+recursive-include .github *.yml
+include app.py run-local.cmd requirements.lock reference-requirements.lock AGENTS.md SECURITY.md CHANGELOG.md CONTRIBUTING.md THIRD_PARTY.md
+recursive-include docs *.md
+recursive-include examples *.json *.csv
+recursive-include data/bench *-template.json *-template.csv
+recursive-include scripts *.py
+recursive-include .streamlit *.toml
+recursive-include reports *.json *.csv *.png *.svg
