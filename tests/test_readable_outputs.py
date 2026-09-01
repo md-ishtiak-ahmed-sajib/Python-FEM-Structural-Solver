@@ -58,6 +58,9 @@ def test_identification_report_explains_success_and_ambiguity_without_json_only(
     ]:
         assert text in html
     assert "<script>bad" not in html and "&lt;script&gt;bad" in html
+    assert 'name="viewport"' in html
+    assert "@media(max-width:640px)" in html
+    assert "<script src=" not in html
     ambiguous = fit_cantilever([Observation("one", 1.0, 1.0, 1.0, 0.001, 1e-6)])
     html = identification_report(ambiguous, {})
     assert "No unique estimates" in html and "Not available" in html

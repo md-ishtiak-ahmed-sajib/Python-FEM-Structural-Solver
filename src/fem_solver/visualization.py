@@ -12,6 +12,21 @@ BLUE = "#2563EB"
 INK = "#13243A"
 
 
+def _geometry_ranges(x_values, y_values):
+    """Return readable equal-scale ranges, including explicit depth for a straight line."""
+    x_min, x_max = min(x_values), max(x_values)
+    y_min, y_max = min(y_values), max(y_values)
+    x_span = max(x_max - x_min, 1.0)
+    y_span = y_max - y_min
+    x_pad = 0.08 * x_span
+    if y_span <= 1e-9 * x_span:
+        y_mid = (y_min + y_max) / 2
+        y_pad = 0.14 * x_span
+        return [x_min - x_pad, x_max + x_pad], [y_mid - y_pad, y_mid + y_pad]
+    y_pad = 0.08 * max(y_span, x_span * 0.2)
+    return [x_min - x_pad, x_max + x_pad], [y_min - y_pad, y_max + y_pad]
+
+
 def model_figure(model: Model, case: str, units: str = "N-m-Pa", selected: str | None = None):
     """Draw only declared geometry and actions. No solution or fabricated result is needed."""
     factor = 1 / UNITS[units]
@@ -119,13 +134,17 @@ def model_figure(model: Model, case: str, units: str = "N-m-Pa", selected: str |
             hovertext=help_text("udl") + " " + help_text("local"),
             captureevents=True,
         )
+    x_range, y_range = _geometry_ranges(
+        [node.x * factor for node in model.nodes], [node.y * factor for node in model.nodes]
+    )
     fig.update_layout(
         template="plotly_white",
         height=410,
         margin=dict(l=30, r=30, t=50, b=35),
         xaxis_title=f"Global x ({unit})",
         yaxis_title=f"Global y ({unit})",
-        yaxis=dict(scaleanchor="x", scaleratio=1),
+        xaxis=dict(range=x_range, constrain="domain"),
+        yaxis=dict(range=y_range, scaleanchor="x", scaleratio=1, constrain="domain"),
         legend=dict(orientation="h", y=-0.2),
     )
     return fig
@@ -313,6 +332,9 @@ def structure_figure(
                 ),
             )
         )
+    plotted_x = [float(value) for trace in fig.data for value in trace.x if value is not None]
+    plotted_y = [float(value) for trace in fig.data for value in trace.y if value is not None]
+    x_range, y_range = _geometry_ranges(plotted_x, plotted_y)
     fig.update_layout(
         template="plotly_white",
         height=490,
@@ -323,7 +345,8 @@ def structure_figure(
         legend=dict(orientation="h", y=-0.15),
         xaxis_title=f"x ({length_unit})",
         yaxis_title=f"y ({length_unit})",
-        yaxis=dict(scaleanchor="x", scaleratio=1),
+        xaxis=dict(range=x_range, constrain="domain"),
+        yaxis=dict(range=y_range, scaleanchor="x", scaleratio=1, constrain="domain"),
         uirevision=model.title,
     )
     return fig

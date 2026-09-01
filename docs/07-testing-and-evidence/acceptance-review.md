@@ -12,7 +12,7 @@ This page compares the accepted plan with the actual software. **Implemented** m
 | Sparse assembly, transformations, prescribed movements and springs | Implemented; symmetry, equilibrium, energy and orientation tests |
 | Independent load cases and SI conversion | Implemented; unit round trips and load-case state tests |
 | Reject bad properties, malformed inputs and mechanisms | Implemented; invalid-model and failed-solve tests; no artificial stiffness |
-| Blank, example and imported starting models | Implemented in Define; incomplete table drafts remain in the session |
+| Home launchpad, blank, example and imported starting models | Implemented; four family cards do not solve; incomplete drafts remain in the current session |
 | Problem question, scope and node/member target | Implemented; selected portions require cut-boundary notes |
 | Separate check and solve actions | Checked by tests that forbid solving in Define and Understand |
 | Eight-step method and actual matrix inspection | Implemented; family-specific rules, element values, DOF maps and equations |
@@ -21,12 +21,14 @@ This page compares the accepted plan with the actual software. **Implemented** m
 | Results, units, reactions, stress, checks and limits | Implemented; sampled extrema are labeled; balance does not mean safety |
 | One-change comparison without changing the baseline | Implemented; load, property, support and failure tests |
 | No stale model or load-case result | Checked by app tests; a new solve is required after changes |
+| Responsive studio shell and stage route | Checked at 1440, 1024, 760 and 390 pixels; page-level horizontal overflow was inspected |
+| Complete result values | Semantic result markup is tested without ellipsis; wide tables scroll inside their own containers |
 | Shared terminology and deeper reading | 99 shared definitions; searchable glossary and related guide downloads |
 | Hover, focus and activation help | Hover, focus display and pointer activation checked; full keyboard and device reviews remain below |
 | Read results without canvas or hover | HTML text tables added for inputs, matrices, results, comparisons and research values |
 | Existing JSON plus a separate learning-project wrapper | Implemented; version and type checks; imported results are not trusted |
-| Self-contained learning report | Includes problem, method, nodal results, sampled member/stress ranges, checks, comparisons and limits |
-| Readable stiffness report | Estimates, units, uncertainty and diagnostic meanings precede the raw reproduction record |
+| Self-contained learning report | Responsive branded header, contents, problem, method, results, checks, comparisons and limits; no external runtime assets |
+| Readable stiffness report | Responsive branded header and contents; estimates, uncertainty and diagnostic meanings precede the raw record |
 | README equations and three kinds of visuals | Implemented; original family diagram, flowchart and reproducible convergence graph |
 | Correct convergence claim | Caption measures the cubic Hermite field before exact uniform-load correction |
 | Nine linked documentation folders | Preserved; root index and section links are checked automatically |

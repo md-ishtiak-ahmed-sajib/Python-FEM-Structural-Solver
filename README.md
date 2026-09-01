@@ -38,7 +38,7 @@ The mathematics is established. The contribution is the connected code, clear ex
 
 ## Learn by defining, explaining and checking a problem
 
-The app starts with a three-stage route. Experienced users can choose **Direct access**. Hover, focus or tap dotted technical terms for simple explanations, or search the glossary.
+The app opens on a project launchpad. Choose Bar, Truss, Beam or Frame, then start blank, open a checked example or continue the current session. The guided route is **Define → Understand → Solve and discuss**. Experienced users can choose **Direct access**. The light engineering-studio design uses local system fonts and works without an account or internet connection. Open **Key terms**, hover or focus a dotted first-use term, or search the glossary for simple explanations.
 
 ```mermaid
 flowchart LR

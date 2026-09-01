@@ -1,26 +1,33 @@
 {
   "checked_on": "2026-09-01",
-  "scope": "Local Codex in-app browser review of the guided Streamlit application. Numerical tests are recorded separately.",
+  "scope": "Local Codex in-app browser review of the v0.2.0 engineering-studio Streamlit application. Numerical tests are recorded separately.",
   "origin": "http://127.0.0.1:8501/",
-  "viewport_css_pixels": {"width": 756, "height": 698},
+  "viewport_css_pixels": [
+    {"width": 1440, "height": 900},
+    {"width": 1024, "height": 800},
+    {"width": 760, "height": 800},
+    {"width": 390, "height": 844}
+  ],
   "observed": [
-    "Define saved and checked the axial bar without presenting a solution; input-valid and stability checks were distinguished.",
-    "Understand displayed eight method steps, actual member properties, DOF maps, element matrices and constrained equations before solving.",
-    "Solve required its explicit button, then displayed movements, diagrams, analytical comparison, balance checks and limitations.",
+    "Home showed four structural-family cards, current-session resume and import without running a solution.",
+    "The 1440-pixel view showed the 280-pixel sidebar and four launchpad cards. The 1024-pixel workspace used overlay navigation. The 760- and 390-pixel pages used one content column with no document-level horizontal overflow.",
+    "Define used focused category editing beside an unsolved preview, then stacked those areas on narrow screens. Input-valid and stability checks remained separate.",
+    "Understand displayed an eight-step map, progressive explanations, actual member properties, DOF maps and four matrix-laboratory views before solving.",
+    "Solve required its explicit button, then displayed complete result cards, structure and member plots, result tabs, calculation checks and limitations.",
     "The applied-load multiplier comparison completed; releasing A:ux showed an unstable-model failure and kept the baseline.",
     "The learning report download control was exercised. Standalone reports for bar, truss, beam and frame were regenerated and opened locally; each rendered its embedded Plotly figure, readable nodal/comparison/member tables and no external script or stylesheet links.",
-    "The stiffness study displayed synthetic labels, estimates, prediction error, readable uncertainty ranges and model-assumption caveats.",
-    "The glossary displayed searchable terms and plain-English explanations. The standalone stiffness report rendered estimates, units, uncertainty, diagnostic meanings, warnings and its raw reproduction record.",
-    "Hover showed a definition without opening the native disclosure. Focus displayed its own definition without pointer hover. Pointer activation opened a disclosure.",
-    "The tooltip panel remained inside the narrow window. The hover-inside-closed-details bug and overlapping open/focused definitions were fixed."
+    "The stiffness study showed data origin and identifiability before complete estimate cards, prediction error, uncertainty and sensitivity details.",
+    "The glossary displayed searchable cards and Model, Mechanics, Calculation and Research filters. The compact Key terms control replaced large terminology strips.",
+    "The shared exported-report style includes a branded header, evidence label, contents, responsive tables and no external stylesheet or script asset.",
+    "Focus outlines, status words and symbols, 44-pixel controls and the reduced-motion media rule were inspected. Color was not the only status indicator."
   ],
   "remaining_review": [
-    "Full keyboard-only navigation and Enter/Space activation could not be confirmed through the browser tool; focus visibility was confirmed.",
+    "Full keyboard-only navigation and Enter/Space activation was not performed; visible focus styling was inspected.",
     "No physical touchscreen or screen-reader review was performed.",
     "No full OS network-outage test was performed; automated app tests block Python socket access.",
-    "All four family workflows are covered by automated app tests. This browser review used the axial bar for the full three-stage route."
+    "All four family workflows and launchpad actions are covered by automated app tests. This browser review used the axial bar for the full three-stage route."
   ],
   "physical_validation": "pending actual measurements",
   "external_reproduction": "not recorded",
-  "public_release": "not performed"
+  "public_release": "v0.2.0 pending clean Windows, Ubuntu and independent OpenSees jobs"
 }

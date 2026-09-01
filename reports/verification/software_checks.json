@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-09-01T00:23:31.727967+00:00",
+  "checked_at_utc": "2026-09-01T05:50:17.627081+00:00",
   "python": "3.12.10",
   "platform": "Windows",
   "checks": [
@@ -44,6 +44,6 @@
       "status": "passed"
     }
   ],
-  "core_source_sha256": "f9ba8f4d6a1af2a44fb3416d89b6f5663e9951a5f502ef54f9f7d705d4e18e02",
+  "core_source_sha256": "c4cb2a920d15fefc108587617e774e40911ee7919340a42a2f3b76ac34828333",
   "evidence_scope": "Local automated software verification only. Not physical validation or independent-person reproduction."
 }

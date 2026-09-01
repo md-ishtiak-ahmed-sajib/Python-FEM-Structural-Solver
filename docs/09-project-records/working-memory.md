@@ -7,7 +7,9 @@ Last updated: 2026-09-01. This page records changing work status. Stable assista
 
 ## Implemented
 
-The project contains an original four-family FEM package, a local Streamlit app, a synthetic study, a real-data importer and reporting tools. The app now has three learning stages: Define, Understand, and Solve and discuss. Direct access and the separate stiffness study remain available.
+The project contains an original four-family FEM package, a local Streamlit app, a synthetic study, a real-data importer and reporting tools. The app opens on a Home launchpad and then uses three learning stages: Define, Understand, and Solve and discuss. Direct access and the separate stiffness study remain available.
+
+The interface has a shared light engineering-studio design. It includes a 280-pixel desktop sidebar, responsive stage progress, split model editing, progressive method steps, a four-view matrix laboratory, complete semantic result cards, result tabs, a focused comparison panel, a stiffness insight dashboard and glossary filters. All assets and fonts remain local. The numerical public interfaces and JSON formats are unchanged.
 
 Documentation is grouped into nine ordered sections. The root README links to every documentation page. Section guides, home links and related-page links help students navigate.
 
@@ -15,11 +17,11 @@ The plain-English guides explain the purpose, benefits, limits, formulas, exampl
 
 The documentation check covers 53 Markdown pages, including the root index, local links, home links and section guides. The glossary is generated from 99 maintained definitions in terms.py. Documentation and glossary checks are part of the release script and GitHub workflow.
 
-Learning explanations, result discussion, comparisons and learning-project exchange are UI-independent helpers. The numerical core and existing model JSON remain unchanged. The app keeps incomplete drafts, separates input checks from solves, clears stale results and preserves comparison baselines. Learning reports include the problem, method, results, checks, comparison, limits and embedded plotting code.
+Learning explanations, result discussion, comparisons and learning-project exchange are UI-independent helpers. The app keeps incomplete drafts, separates input checks from solves, clears stale results and preserves comparison baselines. Learning and identification reports now share a responsive self-contained design with an evidence label, contents, semantic tables, warnings and local plotting assets.
 
 ## Recorded numerical evidence
 
-The current suite has 81 passing tests, including all four guided workflows. The release checks include Ruff lint/format, mypy on 16 package files, dependencies, documentation, generated glossary and source/wheel builds. See the current record for individual outcomes rather than treating this page as a replacement for the logs.
+The current suite has 90 passing tests, including all four guided workflows, all launchpad family actions, visible mechanism failure and contrast checks for the main text/status token pairs. The release checks include Ruff lint/format, mypy on 19 package files, dependencies, documentation, generated glossary and source/wheel builds. See the current record for individual outcomes rather than treating this page as a replacement for the logs.
 
 OpenSees comparisons cover four model families, a rotational support spring and four Timoshenko slenderness cases. The full synthetic grid has 2,304 configurations, 200 planned trials each, 422,400 estimated trials and 192 unidentifiable configurations.
 
@@ -29,7 +31,7 @@ Use [the current check record](../../reports/verification/software_checks.json) 
 
 A separate Python environment installed the built wheel. The repeatable installation script checks all four solvers, learning helpers, report generation, project round trips and synthetic fitting with reserved predictions. Optional UI dependencies were not installed in that separate environment.
 
-The guided browser review exercised the bar's input check, pre-solve method, explicit solve, load comparison, support-release failure, report download control, stiffness view and searchable glossary. Hover and focus definitions were checked at a 756-pixel-wide window. A closed-disclosure hover bug and overlapping definitions were fixed. The automated app tests cover every family, invalid drafts, case changes and measured-data empty states. The current source also has readable HTML alternatives for canvas tables; exported reports for all four families and the stiffness study were opened locally and contained table headers, units, plots and no external script or stylesheet links.
+The current browser review inspected the launchpad and guided workspaces at 1440, 1024, 760 and 390 pixels. It checked the 280-pixel desktop sidebar, tablet/phone navigation, single-column phone layout, stage labels, page-level overflow, 44-pixel controls and progressive term help. The automated app tests cover launchpad actions for all families, guided/direct routes, invalid drafts, case changes, mechanisms, glossary filters and measured-data empty states. Exported reports contain table headers, units, plots and no external script or stylesheet links.
 
 Tests blocked Python socket connections during app workflows. Browser assets were local. The OS internet adapter was not disabled, so no full network-outage test is claimed.
 
@@ -37,7 +39,7 @@ Native term disclosures support focus and activation. Full keyboard-only, screen
 
 ## Current boundaries
 
-No real measurements or another person's reproduction are recorded. The reviewed source is published in the owner's [public GitHub repository](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver) on the main branch. [v0.1.0](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/releases/tag/v0.1.0) was tagged after clean Windows, Ubuntu and OpenSees jobs and includes a wheel, full source archive and checksums. Private vulnerability reporting is enabled. Publication does not add physical or independent evidence.
+No real measurements or another person's reproduction are recorded. The reviewed v0.1.0 source remains published in the owner's [public GitHub repository](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver). The v0.2.0 redesign is implemented locally but is not yet recorded as published; its release requires clean Windows, Ubuntu and independent OpenSees jobs. Publication does not add physical or independent evidence.
 
 The full 2,304-configuration synthetic study was regenerated from the current source on 2026-09-01. This updated a source fingerprint and did not create measured evidence.
 

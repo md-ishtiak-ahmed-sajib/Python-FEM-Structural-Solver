@@ -15,12 +15,15 @@ The calculation package is separate from the interface. This lets a student use 
 | [identification.py](../../src/fem_solver/identification.py) | Fits EI and clamp compliance and reports uncertainty |
 | [study.py](../../src/fem_solver/study.py) | Runs repeatable synthetic comparisons |
 | [export.py](../../src/fem_solver/export.py) | Writes result tables and reports |
+| [report_design.py](../../src/fem_solver/report_design.py) | Supplies the shared self-contained HTML report design |
 | [visualization.py](../../src/fem_solver/visualization.py) | Creates optional plots |
 | [cli.py](../../src/fem_solver/cli.py) | Provides terminal commands |
 | [app.py](../../app.py) | Provides the local browser interface |
 | [learning.py](../../src/fem_solver/learning.py) | Builds reviewed explanations, checks, comparisons and learning reports without UI imports |
 | [terms.py](../../src/fem_solver/terms.py) | Supplies shared term meanings and escaped HTML help |
 | [ui_learning.py](../../src/fem_solver/ui_learning.py) | Renders Define, Understand, and Solve and Discuss |
+| [ui_home.py](../../src/fem_solver/ui_home.py) | Renders the project launchpad and starting actions |
+| [ui_design.py](../../src/fem_solver/ui_design.py) | Supplies design tokens, reusable components and the Plotly theme |
 | [ui_common.py](../../src/fem_solver/ui_common.py) | Renders help, table headings and the searchable glossary |
 | [ui_study.py](../../src/fem_solver/ui_study.py) | Renders the separate stiffness-identification study |
 
@@ -48,7 +51,7 @@ The fit reports failure if the observations cannot separate the requested parame
 
 ## Data ownership
 
-App edits, including incomplete drafts, stay in session independently of page widgets. Input validation and solving are separate. Define previews the model; Understand calls assembly without solving; Solve calls the unchanged public solver only after an explicit action.
+App edits, including incomplete drafts, stay in session independently of page widgets. Home stores only the current route and display state; it does not scan the disk. Input validation and solving are separate. Define previews the model; Understand calls assembly without solving; Solve calls the unchanged public solver only after an explicit action.
 
 An editor base is retained while a table is active, and the current draft is preserved when changing views. Changing the model or load case clears cached results and comparisons. A model-and-case SHA-256 fingerprint prevents a result being displayed for different inputs.
 
@@ -66,7 +69,7 @@ Analytical checks have conservative matching rules: a single horizontal bar or b
 
 The glossary is generated from the term registry, avoiding a second copy of definitions. Native disclosure elements provide hover, focus and activation help; the searchable view provides a non-hover alternative. User text is escaped before HTML export or annotation.
 
-The export module supplies a shared HTML table writer. The learning report adds sampled member ranges with separate units; the stiffness report shows estimates and diagnostic meanings before its raw record. The UI uses the same escaped HTML table structure for read-only alternatives to canvas grids. The helper never changes model or result values.
+The export module supplies a shared HTML table writer. `report_design.py` adds the same local colors, responsive cards, table of contents, table scrolling and reduced-motion rule to both HTML reports. The learning report adds sampled member ranges with separate units; the stiffness report shows estimates and diagnostic meanings before its raw record. The UI uses the same escaped HTML table structure for read-only alternatives to canvas grids. These helpers never change model or result values.
 
 ## Model boundaries
 

@@ -4,7 +4,7 @@ from .identification import IdentificationConfig, IdentificationResult, Observat
 from .model import Model, ModelError, model_from_dict, model_to_dict
 from .solver import AssemblyTrace, SolveOptions, SolveResult, assemble, solve_linear
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __all__ = [
     "Model",
     "ModelError",

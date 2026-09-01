@@ -2,6 +2,14 @@
 
 [Project home](README.md) · [Milestones](docs/09-project-records/milestones.md) · [Evidence status](docs/07-testing-and-evidence/evidence-status.md)
 
+## 2026-09-01: engineering-studio redesign for v0.2.0
+
+Added a permanent Home launchpad with original Bar, Truss, Beam and Frame diagrams, blank/example actions, import and current-session resume. Rebuilt the sidebar, responsive stage indicator, Define split workspace, eight-step Understand map, four-part matrix laboratory, Solve result dashboard, stiffness-study dashboard and filtered glossary around one shared local design system.
+
+Replaced clipped Streamlit metrics with complete semantic result cards, large term strips with a compact Key terms control, and document-like result pages with progressive panels and result tabs. Added an explicit viewing range for one-dimensional geometry while preserving equal axis scales. No numerical interface, JSON format or solver equation changed.
+
+Learning and stiffness reports now share a responsive, self-contained engineering-studio design with a header, evidence label and table of contents. Added launchpad, navigation, stage, stale-state, metric, glossary and report tests. Browser review covers 1440, 1024, 760 and 390 pixel widths; screen-reader and physical touchscreen review remain pending. The v0.2.0 release stays pending until its Windows, Ubuntu and independent OpenSees jobs pass.
+
 ## 2026-09-01: public v0.1.0 release
 
 Committed the reviewed 117-file source set with the owner's verified public GitHub identity and published it at [md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver). Added repository metadata, public citation details, topics and private vulnerability reporting. Updated the workflow to the current Node 24 action generation after the first clean remote run reported a deprecation warning. The clean Windows, Ubuntu and OpenSees jobs then passed, and [v0.1.0](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/releases/tag/v0.1.0) was published with the wheel, source archive and checksums. Physical validation and another person's reproduction remain pending.

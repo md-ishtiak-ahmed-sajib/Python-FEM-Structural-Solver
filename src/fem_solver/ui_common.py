@@ -6,7 +6,8 @@ import pandas as pd
 import streamlit as st
 
 from .export import html_table
-from .terms import TERM_CSS, TERMS, annotate, help_text, term_html
+from .terms import TERMS, annotate, help_text
+from .ui_design import badges, inject_design, key_terms, page_header
 
 
 def explain(message: str):
@@ -14,10 +15,7 @@ def explain(message: str):
 
 
 def term_key(*keys: str):
-    st.markdown(
-        '<div class="fem-key">' + " · ".join(term_html(k) for k in keys) + "</div>",
-        unsafe_allow_html=True,
-    )
+    key_terms(keys)
 
 
 def readable_table(frame: pd.DataFrame, label: str, include_index: bool = False):
@@ -38,25 +36,7 @@ def readable_table(frame: pd.DataFrame, label: str, include_index: bool = False)
 
 
 def style():
-    st.markdown(
-        "<style>"
-        + TERM_CSS
-        + """
-    .block-container{padding-top:1.8rem;max-width:1450px;padding-bottom:4rem}
-    [data-testid="stSidebar"]{background:#edf2f9;border-right:1px solid #dce4ef}
-    h1,h2,h3{letter-spacing:-.025em}
-    [data-testid="stMetric"]{background:white;padding:16px;border:1px solid #dce4ef;border-radius:10px}
-    [data-testid="stMetricValue"]{font-size:1.6rem}
-    [data-testid="stMetricValue"]>div{white-space:normal;overflow-wrap:anywhere}
-    .fem-table{overflow:auto;max-width:100%}
-    .fem-table:focus-visible{outline:2px solid #2563eb;outline-offset:3px}
-    .fem-table table{border-collapse:collapse;font-size:14px}
-    .fem-table caption{text-align:left;font-weight:bold;color:#13243a}
-    .fem-table th,.fem-table td{border:1px solid #cbd5e1;padding:7px;text-align:left}
-    .stage-band{color:#2563eb;font-size:13px;font-weight:bold;letter-spacing:.07em;margin-bottom:1rem}
-    </style>""",
-        unsafe_allow_html=True,
-    )
+    inject_design()
 
 
 TABLES = {
@@ -208,34 +188,144 @@ def observation_columns():
 
 
 def glossary_view():
-    st.title("Find a simple explanation.")
+    page_header(
+        "Find a simple explanation",
+        "Search the same vocabulary used in fields, charts, matrices, warnings and research results.",
+        "GLOSSARY",
+    )
+    badges([("Keyboard friendly", "green"), ("Tap friendly", "blue"), ("Local definitions", "")])
     explain(
         "Hover a dotted term, focus it with the keyboard, or tap it to read its meaning. This glossary is also available without hovering."
     )
     query = st.text_input("Search a term or meaning").strip().lower()
+    groups = {
+        "Model": {
+            "node",
+            "element",
+            "dof",
+            "ux",
+            "uy",
+            "rz",
+            "constraint",
+            "prescribed",
+            "support",
+            "fixed",
+            "pin",
+            "roller",
+            "spring",
+            "load",
+            "case",
+            "udl",
+            "bar",
+            "truss",
+            "beam",
+            "frame",
+        },
+        "Mechanics": {
+            "translation",
+            "rotation",
+            "displacement",
+            "deflection",
+            "material",
+            "section",
+            "E",
+            "A",
+            "I",
+            "fiber",
+            "EA",
+            "EI",
+            "strain",
+            "stress",
+            "axial",
+            "shear",
+            "moment",
+            "reaction",
+            "elastic",
+            "static",
+            "euler",
+            "timoshenko",
+        },
+        "Calculation": {
+            "idealization",
+            "stiffness",
+            "matrix",
+            "local",
+            "global",
+            "cosine",
+            "sine",
+            "transform",
+            "assembly",
+            "free",
+            "rhs",
+            "sparse",
+            "lu",
+            "residual",
+            "eigenvalue",
+            "energy",
+            "equilibrium",
+            "mechanism",
+            "conditioning",
+            "shape",
+            "consistent",
+            "mesh",
+            "convergence",
+            "magnification",
+            "si",
+        },
+        "Research": {
+            "compliance",
+            "gamma",
+            "sensitivity",
+            "rank",
+            "singular",
+            "correlation",
+            "bootstrap",
+            "uncertainty",
+            "noise",
+            "characteristic",
+            "rmse",
+            "holdout",
+            "train",
+            "synthetic",
+            "measured",
+            "unidentifiable",
+            "calibration",
+            "zero",
+            "provenance",
+        },
+    }
+    group = st.pills(
+        "Filter by topic",
+        ["All", "Model", "Mechanics", "Calculation", "Research"],
+        default="All",
+        width="stretch",
+    )
     matches = [
         (key, term)
         for key, term in TERMS.items()
-        if not query
-        or query in (term.label + " " + term.meaning + " " + " ".join(term.aliases)).lower()
+        if (group == "All" or key in groups[group or "Model"])
+        and (
+            not query
+            or query in (term.label + " " + term.meaning + " " + " ".join(term.aliases)).lower()
+        )
     ]
-    for key, term in sorted(matches, key=lambda pair: pair[1].label.lower()):
-        with st.expander(term.label):
-            st.write(term.meaning)
-            path = Path(__file__).resolve().parents[2] / "docs" / term.guide
-            # Editable installs live under src; wheel installs may have no source docs.
-            if not path.exists():
-                path = Path.cwd() / "docs" / term.guide
-            if path.is_file():
-                st.download_button(
-                    "Save the related guide",
-                    path.read_text(encoding="utf-8"),
-                    path.name,
-                    "text/markdown",
-                    key="guide_" + key,
-                )
-            st.caption(
-                "Read more: docs/" + term.guide + ". All guides are indexed in the root README."
-            )
+    columns = st.columns(2)
+    for index, (key, term) in enumerate(sorted(matches, key=lambda pair: pair[1].label.lower())):
+        with columns[index % 2]:
+            with st.expander(term.label):
+                st.write(term.meaning)
+                path = Path(__file__).resolve().parents[2] / "docs" / term.guide
+                # Editable installs live under src; wheel installs may have no source docs.
+                if not path.exists():
+                    path = Path.cwd() / "docs" / term.guide
+                if path.is_file():
+                    st.download_button(
+                        "Save the related guide",
+                        path.read_text(encoding="utf-8"),
+                        path.name,
+                        "text/markdown",
+                        key="guide_" + key,
+                    )
+                st.caption("Read more: docs/" + term.guide)
     if not matches:
         st.info("No matching term. Try a shorter word.")

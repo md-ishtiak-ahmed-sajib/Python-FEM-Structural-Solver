@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "Please cite this software and its version when using the implementation or study."
 type: software
 title: "Python-FEM-Structural-Solver"
-version: 0.1.0
+version: 0.2.0
 authors:
   - family-names: "Sajib"
     given-names: "Md Ishtiak Ahmed"

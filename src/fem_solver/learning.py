@@ -12,6 +12,7 @@ import numpy as np
 from . import __version__
 from .export import html_table
 from .model import Model, ModelError, model_from_dict, model_to_dict
+from .report_design import report_end, report_start
 from .solver import AssemblyTrace, SolveResult, assemble
 from .terms import TERMS
 
@@ -510,11 +511,23 @@ def learning_report(
         return "<ul>" + "".join("<li>" + escape(v) + "</li>" for v in items) + "</ul>"
 
     parts = [
-        "<!doctype html><html lang='en'><head><meta charset='utf-8'><title>FEM learning report</title><style>body{max-width:1100px;margin:32px auto;padding:24px;font:16px/1.65 Arial;color:#13243a}h1,h2{color:#1d4ed8}pre{white-space:pre-wrap;background:#eef3fa;padding:16px}.fem-table{overflow:auto}table{border-collapse:collapse}td,th{padding:8px;border:1px solid #cbd5e1}caption{text-align:left;font-weight:bold}</style></head><body>",
-        "<h1>" + escape(model.title) + "</h1>",
-        f"<p>Numerical model result, not a measured experiment. Solver {escape(__version__)}. Case: {escape(result.case)}.</p>",
+        report_start(
+            model.title,
+            "Define the problem, understand the method, inspect the result and keep the limitations beside it.",
+            "Numerical model result · not a measured experiment",
+            [
+                ("define", "Define"),
+                ("understand", "Understand"),
+                ("solve", "Solve and discuss"),
+                ("checks", "Checks"),
+                ("limits", "Limits"),
+                ("results", "Tables"),
+                ("reproduce", "Reproduce"),
+            ],
+        ),
+        f"<p class='status'>Solver {escape(__version__)} · Case {escape(result.case)}</p>",
         "<p>Model and case SHA-256: " + fingerprint(model, result.case) + "</p>",
-        "<h2>1. Define</h2>"
+        "<section class='card' id='define'><h2>1. Define</h2>"
         + bullets(
             [
                 brief.question,
@@ -522,21 +535,25 @@ def learning_report(
                 brief.boundary_notes or "No cut-boundary notes supplied.",
                 "Prediction: " + (brief.prediction or "Not entered."),
             ]
-        ),
-        "<h2>2. Understand</h2>"
+        )
+        + "</section>",
+        "<section class='card' id='understand'><h2>2. Understand</h2>"
         + bullets([heading + ": " + body for heading, body in guide.steps])
-        + bullets(guide.support_notes),
-        "<h2>3. Solve and discuss</h2>" + bullets(discussion.observations),
+        + bullets(guide.support_notes)
+        + "</section>",
+        "<section id='solve'><h2>3. Solve and discuss</h2>" + bullets(discussion.observations),
         figure_html,
-        "<h2>Checks</h2>"
+        "</section><section class='card' id='checks'><h2>Checks</h2>"
         + bullets(
             [
                 f"{c.name}: imbalance {c.imbalance:.6g} {c.unit}; tolerance {c.tolerance:.6g} {c.unit}; {'passed' if c.passed else 'failed'}."
                 for c in discussion.checks
             ]
-        ),
-        "<h2>Limitations</h2>" + bullets(discussion.limitations),
+        )
+        + "</section>",
+        "<section class='card' id='limits'><h2>Limitations</h2>" + bullets(discussion.limitations),
         "<h2>Next investigations</h2>" + bullets(discussion.next_steps),
+        "</section>",
     ]
     if comparison:
         parts += [
@@ -550,7 +567,7 @@ def learning_report(
         "<h2>Method choices</h2>" + bullets([title + ": " + body for title, body in guide.methods])
     ]
     parts += [
-        "<h2>Node movements and support/spring reactions</h2><p>SI values; moments and rotations have their own units.</p>",
+        "<section id='results'><h2>Node movements and support/spring reactions</h2><p>SI values; moments and rotations have their own units.</p>",
         html_table(
             [
                 {
@@ -566,7 +583,7 @@ def learning_report(
             "Node movements and support reactions",
         ),
         "<h2>Member results</h2><p>These are sampled ranges, not exact maximum values. Local x runs from the member's start to its end. Tension and sagging moment are positive. No stress concentration or strength check is included.</p>",
-        html_table(member_summary(model, result), "Sampled member ranges in SI"),
+        html_table(member_summary(model, result), "Sampled member ranges in SI") + "</section>",
     ]
     parts += [
         "<details><summary>Plain-English glossary</summary>",
@@ -582,8 +599,9 @@ def learning_report(
         + "</dl></details>",
     ]
     parts += [
-        "<h2>Reproduce the problem</h2><p>Units inside this record are SI. Recompute results after import.</p><pre>",
+        "<section id='reproduce'><h2>Reproduce the problem</h2><p>Units inside this record are SI. Recompute results after import.</p><pre>",
         escape(json.dumps(project_to_dict(model, brief), indent=2)),
-        "</pre></body></html>",
+        "</pre></section>",
+        report_end(),
     ]
     return "".join(parts)

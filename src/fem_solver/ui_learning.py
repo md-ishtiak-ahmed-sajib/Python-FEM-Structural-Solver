@@ -29,6 +29,18 @@ from .model import DOFS, UNITS, ModelError, model_from_dict, model_to_dict
 from .solver import SolveOptions, assemble, solve_linear
 from .terms import help_text, term_html
 from .ui_common import TABLE_TERMS, TABLES, editor_columns, explain, readable_table, term_key
+from .ui_design import (
+    PLOT_CONFIG,
+    apply_plot_theme,
+    badges,
+    empty_state,
+    metric_cards,
+    navigate,
+    page_header,
+    section_title,
+    status_message,
+    step_map,
+)
 from .visualization import member_figure, member_quantity, model_figure, structure_figure
 
 
@@ -99,11 +111,12 @@ def member_control(model):
 
 
 def define_view():
-    st.title("1. Define your structural problem.")
-    explain(
-        "Start with a question, then describe the geometry, supports and loads. Edits stay in your session, including incomplete drafts. Download a file to keep work after closing the app."
+    page_header(
+        "Define your structural problem",
+        "Describe the real structure before asking the engine for an answer. Your incomplete work stays in this session.",
+        "STAGE 1 OF 3 · DEFINE",
     )
-    data = st.session_state.editor_base
+    data = st.session_state.draft
     revision = st.session_state.revision
     units = st.selectbox(
         "Input / export units",
@@ -114,34 +127,37 @@ def define_view():
     )
     if "unit_error" in st.session_state:
         st.warning(st.session_state.unit_error)
-    data = st.session_state.editor_base
+    data = st.session_state.draft
     revision = st.session_state.revision
     units = data["units"]
     brief = current_brief()
-    with st.expander("What do you want to learn?", expanded=True):
-        question = st.text_input(
-            "Your engineering question", brief.question, key=f"question_{revision}"
+    badges([(data["kind"].title(), "blue"), (units, ""), ("Draft", "amber")])
+    top_left, top_right = st.columns([1.5, 1])
+    with top_left:
+        title = st.text_input(
+            "Project title", data.get("title", "My structural problem"), key=f"title_{revision}"
         )
+        question = st.text_input("Engineering question", brief.question, key=f"question_{revision}")
+    with top_right:
         scope = st.selectbox(
-            "Model extent",
+            "Structure extent",
             ["Whole structure", "Selected portion"],
             index=0 if brief.scope == "Whole structure" else 1,
             key=f"scope_{revision}",
         )
+        st.caption(FAMILY[data["kind"]])
+    notes = brief.boundary_notes
+    if scope == "Selected portion":
         notes = st.text_area(
-            "For a selected portion: explain the cut-boundary forces and restraints",
+            "Cut-boundary forces and restraints",
             brief.boundary_notes,
             key=f"boundary_{revision}",
             help="Describe what the removed part does to this portion. Do not assume a cut is fixed.",
         )
-        if scope == "Selected portion" and not notes.strip():
+        if not notes.strip():
             st.warning(
                 "Add cut-boundary notes before moving to theory or solving. We will not invent the missing boundary conditions."
             )
-    title = st.text_input(
-        "Model title", data.get("title", "My structural problem"), key=f"title_{revision}"
-    )
-    explain(FAMILY[data["kind"]])
     term_key(
         "node",
         "element",
@@ -159,20 +175,31 @@ def define_view():
         "qx",
         "qy",
     )
-    tabs = st.tabs(["Geometry", "Material and section", "Supports", "Loads"])
-    layout = {
-        "nodes": 0,
-        "elements": 0,
-        "materials": 1,
-        "sections": 1,
-        "constraints": 2,
-        "springs": 2,
-        "loads": 3,
-        "distributed_loads": 3,
+    categories = {
+        "Geometry": ["nodes", "elements"],
+        "Properties": ["materials", "sections"],
+        "Supports": ["constraints", "springs"],
+        "Loads": ["loads", "distributed_loads"],
     }
-    candidate = {"schema_version": 1, "units": units, "kind": data["kind"], "title": title}
-    for table, tab in layout.items():
-        with tabs[tab]:
+    candidate = {
+        "schema_version": 1,
+        "units": units,
+        "kind": data["kind"],
+        "title": title,
+        **{table: list(data.get(table, [])) for table in TABLES},
+    }
+    editor, preview = st.columns([1.45, 1])
+    with editor:
+        section_title("Model inputs", "Edit one category at a time")
+        category = st.segmented_control(
+            "Model category",
+            list(categories),
+            default="Geometry",
+            key=f"model_category_{revision}",
+            width="stretch",
+        )
+        for table in categories[category or "Geometry"]:
+            st.markdown("#### " + table.replace("_", " ").title())
             st.markdown(term_html(TABLE_TERMS[table]), unsafe_allow_html=True)
             frame = pd.DataFrame(data.get(table, []), columns=TABLES[table])
             for col in frame.columns:
@@ -213,15 +240,15 @@ def define_view():
                 edited.rename(columns=headings),
                 "Model " + table.replace("_", " ") + " (" + units + ")",
             )
-    with tabs[2]:
-        term_key("fixed", "pin", "roller", "prescribed")
-        explain(
-            "Enter one constraint row for each held movement. A frame fixed support holds ux, uy and rz; a pin holds ux and uy; an axis-aligned roller holds one translation. A beam has only uy and rz. Springs supply resistance rather than prescribing a movement."
-        )
-    with tabs[3]:
-        explain(
-            "Use N for translational nodal forces. A load at rz is a moment in N times the selected length unit. Distributed loads use the member's local directions. Use separate case names for independent loading conditions."
-        )
+        if category == "Supports":
+            term_key("fixed", "pin", "roller", "prescribed")
+            explain(
+                "Add one row for every movement that a support prevents. A spring resists movement instead of fixing it."
+            )
+        if category == "Loads":
+            explain(
+                "Nodal translations use forces. Nodal rotations use moments. Distributed loads follow the member's local axes."
+            )
     if candidate != st.session_state.draft:
         st.session_state.draft = candidate
         invalidate()
@@ -236,52 +263,78 @@ def define_view():
         model = model_from_dict(candidate)
     except (ModelError, ValueError) as exc:
         error = str(exc)
-    if st.button("Save and check model", type="primary"):
-        if error:
-            st.error("Draft saved in this session, but input checks did not pass: " + error)
-        else:
-            st.success(
-                "Input checks passed. The draft is saved in this session. Stability and the solution have not been checked."
-            )
-    if model:
-        left, right = st.columns(2)
-        node_options = [""] + [n.id for n in model.nodes]
-        member_options = [""] + [e.id for e in model.elements]
-        for key, options, container, label in [
-            ("target_node", node_options, left, "Node of interest"),
-            ("target_member", member_options, right, "Member of interest"),
-        ]:
-            widget_key = f"{key}_{revision}"
-            if st.session_state.get(widget_key) not in options:
-                st.session_state[widget_key] = (
-                    st.session_state.brief[key] if st.session_state.brief[key] in options else ""
+    with preview:
+        section_title("Geometry preview", "No analysis runs here")
+        with st.container(key="preview-panel"):
+            if model:
+                status_message(
+                    "Input checks passed",
+                    "The model can be inspected. Structural stability is checked only during Solve.",
                 )
-            value = container.selectbox(
-                label, options, key=widget_key, format_func=lambda v: v or "No preference"
+                with st.expander("Result focus", expanded=True):
+                    node_options = [""] + [n.id for n in model.nodes]
+                    member_options = [""] + [e.id for e in model.elements]
+                    for key, options, label in [
+                        ("target_node", node_options, "Node of interest"),
+                        ("target_member", member_options, "Member of interest"),
+                    ]:
+                        widget_key = f"{key}_{revision}"
+                        if st.session_state.get(widget_key) not in options:
+                            saved = st.session_state.brief[key]
+                            st.session_state[widget_key] = saved if saved in options else ""
+                        st.session_state.brief[key] = st.selectbox(
+                            label,
+                            options,
+                            key=widget_key,
+                            format_func=lambda value: value or "No preference",
+                        )
+                case = case_control(model)
+                figure = apply_plot_theme(
+                    model_figure(model, case, units, st.session_state.brief["target_member"]), 350
+                )
+                st.plotly_chart(figure, width="stretch", config=PLOT_CONFIG)
+                st.caption(
+                    "Undeformed geometry. Triangles mark known movements; diamonds mark support springs."
+                )
+            else:
+                status_message(
+                    "Draft needs input changes",
+                    error or "Complete the model tables to see its geometry.",
+                    "warning",
+                )
+                empty_state(
+                    "Preview waiting for a valid model",
+                    "Your draft is still saved. Correct the named input and the preview will return.",
+                    "◇",
+                )
+
+    with st.container(key="action-bar"):
+        status_col, check_col, next_col = st.columns([1.4, 1, 1])
+        status_col.caption(
+            "Valid input · stability not checked" if model else "Draft saved · input changes needed"
+        )
+        if check_col.button("Save and check", type="primary", width="stretch"):
+            if error:
+                st.error("Draft saved, but input checks did not pass: " + error)
+            else:
+                st.success("Input checks passed. Stability and the solution have not been checked.")
+        if next_col.button("Continue to Understand", disabled=model is None, width="stretch"):
+            navigate("2 · Understand", "Inside FEM")
+
+    if model:
+        with st.expander("Export this draft"):
+            st.download_button(
+                "Download model JSON",
+                json.dumps(model_to_dict(model, units), indent=2),
+                "model.json",
+                "application/json",
             )
-            st.session_state.brief[key] = value
-        case = case_control(model)
-        st.plotly_chart(
-            model_figure(model, case, units, st.session_state.brief["target_member"]),
-            width="stretch",
-        )
-        explain(
-            "Undeformed geometry only; no solve has run. Axes use equal scales. Triangles mark prescribed movements; diamonds mark springs. Hover supports to see exactly what is held."
-        )
-        st.download_button(
-            "Download model JSON",
-            json.dumps(model_to_dict(model, units), indent=2),
-            "model.json",
-            "application/json",
-        )
-        st.download_button(
-            "Download learning project",
-            json.dumps(project_to_dict(model, current_brief()), indent=2),
-            "learning-project.json",
-            "application/json",
-        )
-    else:
-        st.info("Complete the tables to preview the geometry. " + (error or ""))
+            st.download_button(
+                "Download learning project",
+                json.dumps(project_to_dict(model, current_brief()), indent=2),
+                "learning-project.json",
+                "application/json",
+            )
     try:
         draft_json = json.dumps(candidate, indent=2, allow_nan=False)
     except ValueError:
@@ -295,7 +348,7 @@ def define_view():
             "draft.json",
             "application/json",
         )
-    with st.expander("Does your problem need another method?"):
+    with st.expander("Does this problem need another method?"):
         explain(
             "This release has no plates, shells, solids, dynamics, buckling, nonlinear materials or member end releases. Use an appropriate solver for those behaviors. The learning notes explain possible next methods but do not calculate unsupported results."
         )
@@ -315,157 +368,141 @@ def inspect_assembly(model, trace, case, selected):
         properties.extend([("Area A", section.A, "m²"), ("EA", em.EA, "N")])
     if model.kind in ("beam", "frame"):
         properties.extend([("Second moment of area I", section.I, "m⁴"), ("EI", em.EI, "N m²")])
-    term_key(
-        "E",
-        "A",
-        "I",
-        "EA",
-        "EI",
-        "local",
-        "global",
-        "cosine",
-        "sine",
-        "transform",
-        "assembly",
-        "free",
-        "rhs",
-        "sparse",
-    )
-    left, right = st.columns([1, 1.2])
-    with left:
-        st.subheader("Selected member: " + selected)
-        st.table(
+    term_key("matrix", "transform", "assembly", "free", "rhs", "sparse")
+    labels = [trace.labels[i] for i in em.indices]
+    local_labels = {
+        "bar": ["u1", "u2"],
+        "truss": ["u1", "u2"],
+        "beam": ["v1", "theta1", "v2", "theta2"],
+        "frame": ["u1", "v1", "theta1", "u2", "v2", "theta2"],
+    }[model.kind]
+    summary, lab = st.columns([0.75, 1.75])
+    with summary:
+        st.markdown("#### Member " + selected)
+        st.dataframe(
             pd.DataFrame(
                 [
                     {"Property": name, "Value": f"{value:.6g}", "Unit": unit}
                     for name, value, unit in properties
                 ]
-            )
-        )
-        labels = [trace.labels[i] for i in em.indices]
-        st.caption("Global DOF map: " + ", ".join(labels))
-        local_labels = {
-            "bar": ["u1", "u2"],
-            "truss": ["u1", "u2"],
-            "beam": ["v1", "theta1", "v2", "theta2"],
-            "frame": ["u1", "v1", "theta1", "u2", "v2", "theta2"],
-        }[model.kind]
-        explain(
-            "Local u is axial movement, v is transverse movement and theta is rotation. Subscripts 1 and 2 refer to the start and end nodes."
-        )
-        st.markdown(term_html("matrix", "Local stiffness kₑ"), unsafe_allow_html=True)
-        st.dataframe(
-            pd.DataFrame(em.local, index=local_labels, columns=local_labels), width="stretch"
-        )
-        readable_table(
-            pd.DataFrame(em.local, index=local_labels, columns=local_labels),
-            "Local stiffness",
-            True,
-        )
-        st.markdown(term_html("transform", "Coordinate transformation T"), unsafe_allow_html=True)
-        st.dataframe(
-            pd.DataFrame(em.transform, index=local_labels, columns=labels), width="stretch"
-        )
-        readable_table(
-            pd.DataFrame(em.transform, index=local_labels, columns=labels),
-            "Coordinate transformation",
-            True,
-        )
-        st.latex(r"K_e=T^{\mathsf T}k_eT")
-        with st.expander("Selected element's contribution to global assembly"):
-            st.dataframe(pd.DataFrame(em.global_matrix, index=labels, columns=labels))
-            readable_table(
-                pd.DataFrame(em.global_matrix, index=labels, columns=labels),
-                "Element assembly contribution",
-                True,
-            )
-    with right:
-        st.subheader("Global stiffness")
-        K = trace.stiffness
-        if len(trace.labels) <= 120:
-            fig = go.Figure(
-                go.Heatmap(
-                    z=K.toarray(),
-                    x=trace.labels,
-                    y=trace.labels,
-                    colorscale="RdBu",
-                    zmid=0,
-                    colorbar=dict(title="Raw SI"),
-                    hovertemplate="Row %{y}<br>Column %{x}<br>Stiffness coefficient %{z}<extra></extra>",
-                )
-            )
-        else:
-            coo = K.tocoo()
-            fig = go.Figure(
-                go.Scattergl(
-                    x=coo.col,
-                    y=coo.row,
-                    mode="markers",
-                    marker=dict(size=2, color="#2563eb"),
-                    hovertemplate="Nonzero entry<br>Column %{x}<br>Row %{y}<extra></extra>",
-                )
-            )
-        fig.update_layout(height=400, yaxis=dict(autorange="reversed"), template="plotly_white")
-        st.plotly_chart(fig, width="stretch")
-        entries = K.tocoo()
-        readable_table(
-            pd.DataFrame(
-                {
-                    "Row DOF": [trace.labels[i] for i in entries.row],
-                    "Column DOF": [trace.labels[i] for i in entries.col],
-                    "Stiffness coefficient (raw SI)": entries.data,
-                }
             ),
-            "Nonzero global stiffness entries",
+            hide_index=True,
+            width="stretch",
         )
-        explain(
-            "Small systems show all entries; larger systems show only nonzero positions. Translations use metres and rotations use radians, so raw matrix entries have different units. The solver scales equations for its numerical checks."
+        st.caption("Global DOF map: " + ", ".join(labels))
+    with lab:
+        view = st.segmented_control(
+            "Matrix laboratory",
+            ["Element", "Transformation", "Assembly", "Boundary system"],
+            default="Element",
+            width="stretch",
+            key="matrix_lab_" + selected,
         )
-    st.latex(r"K_{ff}u_f=F_f-K_{fc}u_c")
-    free, fixed = trace.free, list(trace.prescribed)
-    rhs = trace.loads[case][free] - trace.stiffness[free][:, fixed] @ np.array(
-        list(trace.prescribed.values())
-    )
-    if len(free) <= 120:
-        with st.expander("Reduced stiffness Kff"):
-            labels = [trace.labels[i] for i in free]
-            st.dataframe(
-                pd.DataFrame(trace.stiffness[free][:, free].toarray(), index=labels, columns=labels)
+        if view == "Element":
+            explain(
+                "This matrix connects the member-end movements to the member-end forces in local directions."
             )
+            st.latex(r"f_e=k_eu_e")
+            frame = pd.DataFrame(em.local, index=local_labels, columns=local_labels)
+            st.dataframe(frame, width="stretch")
+            readable_table(frame, "Local stiffness", True)
+        elif view == "Transformation":
+            explain(
+                "The transformation connects local member directions to the shared global directions."
+            )
+            st.latex(r"K_e=T^{\mathsf T}k_eT")
+            frame = pd.DataFrame(em.transform, index=local_labels, columns=labels)
+            st.dataframe(frame, width="stretch")
+            readable_table(frame, "Coordinate transformation", True)
+        elif view == "Assembly":
+            explain("Assembly adds every member contribution at the matching structure movements.")
+            contribution = pd.DataFrame(em.global_matrix, index=labels, columns=labels)
+            with st.expander("Selected member contribution"):
+                st.dataframe(contribution, width="stretch")
+            stiffness = trace.stiffness
+            if len(trace.labels) <= 120:
+                figure = go.Figure(
+                    go.Heatmap(
+                        z=stiffness.toarray(),
+                        x=trace.labels,
+                        y=trace.labels,
+                        colorscale="RdBu",
+                        zmid=0,
+                        colorbar=dict(title="Raw SI"),
+                        hovertemplate="Row %{y}<br>Column %{x}<br>Coefficient %{z}<extra></extra>",
+                    )
+                )
+            else:
+                coo = stiffness.tocoo()
+                figure = go.Figure(
+                    go.Scattergl(
+                        x=coo.col,
+                        y=coo.row,
+                        mode="markers",
+                        marker=dict(size=3, color="#246bfe"),
+                        hovertemplate="Nonzero entry<br>Column %{x}<br>Row %{y}<extra></extra>",
+                    )
+                )
+            apply_plot_theme(figure, 380)
+            figure.update_yaxes(autorange="reversed")
+            st.plotly_chart(figure, width="stretch", config=PLOT_CONFIG)
+            entries = stiffness.tocoo()
             readable_table(
                 pd.DataFrame(
-                    trace.stiffness[free][:, free].toarray(), index=labels, columns=labels
+                    {
+                        "Row DOF": [trace.labels[i] for i in entries.row],
+                        "Column DOF": [trace.labels[i] for i in entries.col],
+                        "Stiffness coefficient (raw SI)": entries.data,
+                    }
                 ),
-                "Reduced stiffness",
-                True,
+                "Nonzero global stiffness entries",
             )
-    right_side = pd.DataFrame(
-        {
-            "Free DOF": [trace.labels[i] for i in free],
-            "Known right-hand side": rhs,
-            "Unit": ["N m" if trace.labels[i].endswith(":rz") else "N" for i in free],
-        }
-    )
-    st.dataframe(
-        right_side,
-        hide_index=True,
-        column_config={
-            "Free DOF": st.column_config.TextColumn(help=help_text("free")),
-            "Known right-hand side": st.column_config.NumberColumn(help=help_text("rhs")),
-        },
-    )
-    readable_table(right_side, "Known right-hand side and units")
-    explain(
-        "The unknown movements have not been filled in. Stage 3 performs the solve. A complete assembled matrix can still describe an unstable structure."
-    )
+        else:
+            explain(
+                "Known support movements are separated from the movements that the solver must find."
+            )
+            st.latex(r"K_{ff}u_f=F_f-K_{fc}u_c")
+            free, fixed = trace.free, list(trace.prescribed)
+            prescribed = np.array(list(trace.prescribed.values()))
+            rhs = trace.loads[case][free] - trace.stiffness[free][:, fixed] @ prescribed
+            reduced_labels = [trace.labels[i] for i in free]
+            if len(free) <= 120:
+                frame = pd.DataFrame(
+                    trace.stiffness[free][:, free].toarray(),
+                    index=reduced_labels,
+                    columns=reduced_labels,
+                )
+                st.dataframe(frame, width="stretch")
+                readable_table(frame, "Reduced stiffness", True)
+            right_side = pd.DataFrame(
+                {
+                    "Free DOF": reduced_labels,
+                    "Known right-hand side": rhs,
+                    "Unit": ["N m" if label.endswith(":rz") else "N" for label in reduced_labels],
+                }
+            )
+            st.dataframe(right_side, hide_index=True, width="stretch")
+            readable_table(right_side, "Known right-hand side and units")
+            st.caption("The unknown movements are still blank. Stage 3 performs the solve.")
 
 
 def understand_view():
-    st.title("2. Understand the method.")
+    page_header(
+        "Understand the method",
+        "Follow the calculation from physical assumptions to checks. Open details only when you need them.",
+        "STAGE 2 OF 3 · UNDERSTAND",
+    )
     model = get_model()
     if model is None:
         return
-    st.write("Your question: " + current_brief().question)
+    badges(
+        [
+            (model.kind.title(), "blue"),
+            (st.session_state.draft["units"], ""),
+            ("Not solved", "amber"),
+        ]
+    )
+    st.write("**Engineering question:** " + current_brief().question)
     case = case_control(model)
     try:
         trace = assemble(model)
@@ -473,35 +510,54 @@ def understand_view():
     except ModelError as exc:
         st.error(str(exc))
         return
+    metric_cards(
+        [
+            ("Nodes", str(len(model.nodes)), "Geometry points"),
+            ("Members", str(len(model.elements)), model.kind.title()),
+            ("DOFs", str(len(trace.labels)), "Before restraints"),
+            ("Known movements", str(len(trace.prescribed)), "Supports and prescribed values"),
+        ],
+        "Model summary",
+    )
     explain(guide.introduction)
+    section_title("Eight-step method map", "Select a step below for the reasoning")
+    step_map([title for title, _ in guide.steps])
     for title, body in guide.steps:
-        st.subheader(title)
-        explain(body)
-        if title.startswith("2."):
-            for note in guide.support_notes:
-                explain(note)
-    with st.expander("Choose methods and avoid common mistakes", expanded=False):
-        for title, body in guide.methods:
-            st.subheader(title)
+        with st.expander(title):
             explain(body)
-    with st.expander("A matching hand check"):
+            if title.startswith("2."):
+                for note in guide.support_notes:
+                    explain(note)
+    section_title("Choose a suitable method", "A good calculation begins with a suitable model")
+    method_columns = st.columns(min(3, max(1, len(guide.methods))))
+    for index, (title, body) in enumerate(guide.methods):
+        with method_columns[index % len(method_columns)]:
+            with st.container(border=True):
+                st.markdown("#### " + title)
+                explain(body)
+    with st.expander("Matching analytical check"):
         if guide.hand_check:
             explain(str(guide.hand_check["scope"]))
             st.code(guide.hand_check["formula"], language=None)
             st.write(f"{guide.hand_check['label']} = {guide.hand_check['value']:.6g} m")
         else:
             explain(
-                "No built-in analytical formula matches this exact model. Use equilibrium, the inspected equations and appropriate independent comparisons. The app will not apply a cantilever formula to a different structure."
+                "No built-in formula matches this exact model. The app will not use an unrelated textbook answer."
             )
-    st.session_state.brief["prediction"] = st.text_area(
-        "Optional prediction: what movement or change do you expect, and why?",
-        current_brief().prediction,
-        key=f"prediction_{st.session_state.revision}",
-    )
+    section_title("Make a prediction", "Optional, but useful for checking physical sense")
+    with st.container(border=True):
+        st.session_state.brief["prediction"] = st.text_area(
+            "What movement or change do you expect, and why?",
+            current_brief().prediction,
+            key=f"prediction_{st.session_state.revision}",
+        )
     selected = member_control(model)
-    st.plotly_chart(model_figure(model, case, selected=selected), width="stretch")
-    with st.expander("Inside FEM: actual matrices and equations", expanded=True):
-        inspect_assembly(model, trace, case, selected)
+    figure = apply_plot_theme(model_figure(model, case, selected=selected), 380)
+    st.plotly_chart(figure, width="stretch", config=PLOT_CONFIG)
+    section_title("Matrix laboratory", "Actual values from the selected member and model")
+    inspect_assembly(model, trace, case, selected)
+    if st.button("Continue to Solve", type="primary"):
+        navigate("3 · Solve and discuss", "Results")
 
 
 def comparison_controls(model, result):
@@ -593,57 +649,103 @@ def comparison_controls(model, result):
 
 
 def solve_view():
-    st.title("3. Solve and discuss.")
+    page_header(
+        "Solve and discuss",
+        "Run the checked model, inspect the response, test the equations, and state what the result cannot prove.",
+        "STAGE 3 OF 3 · SOLVE",
+    )
     model = get_model()
     if model is None:
         return
-    st.write("Your question: " + current_brief().question)
+    st.write("**Engineering question:** " + current_brief().question)
     case = case_control(model)
     stamp = fingerprint(model, case)
-    if st.session_state.get("solution", (None,))[0] != stamp:
+    solution_state = st.session_state.get("solution")
+    if solution_state is not None and solution_state[0] != stamp:
         invalidate()
     try:
         check_brief(current_brief(), model)
     except ModelError as exc:
         st.error(str(exc))
         return
-    if st.button("Solve", type="primary"):
-        invalidate()
-        try:
-            st.session_state.solution = (stamp, solve_linear(model, SolveOptions(case=case)))
-        except ModelError as exc:
-            st.session_state.solve_error = str(exc)
-    if "solve_error" in st.session_state:
-        st.error(st.session_state.solve_error)
-        explain(
-            "Check the units, connected nodes and real support restraints. A mechanism has a movement the model cannot resist. No artificial stabilization was applied."
+    if "solution" not in st.session_state and "solve_error" not in st.session_state:
+        badges(
+            [
+                (model.kind.title(), "blue"),
+                (st.session_state.draft["units"], ""),
+                (case, ""),
+                ("Ready", "green"),
+            ]
         )
+        metric_cards(
+            [
+                ("Nodes", str(len(model.nodes)), "Geometry points"),
+                ("Members", str(len(model.elements)), model.kind.title()),
+                ("Load case", case, "Selected for this solve"),
+                ("State", "Not solved", "No result is being reused"),
+            ],
+            "Model ready to solve",
+        )
+        empty_state(
+            "Ready when you are",
+            "The engine will assemble the equations, apply the known movements, solve the unknown movements, and recover forces and reactions.",
+            "▶",
+        )
+    if "solution" not in st.session_state:
+        if st.button("Solve model", type="primary", width="stretch"):
+            invalidate()
+            try:
+                st.session_state.solution = (stamp, solve_linear(model, SolveOptions(case=case)))
+            except ModelError as exc:
+                st.session_state.solve_error = str(exc)
+            st.rerun()
+    if "solve_error" in st.session_state:
+        status_message(
+            "The model did not solve",
+            st.session_state.solve_error,
+            "error",
+        )
+        explain(
+            "Check the units, connected nodes and real supports. A mechanism has a movement that the model cannot resist. The engine did not add artificial stiffness."
+        )
+        if st.button("Return to Define"):
+            navigate("1 · Define", "Model")
         return
     if "solution" not in st.session_state:
-        explain(
-            "Press Solve when you are ready. No previous model's results are shown. You can visit Understand first or solve directly."
-        )
         return
     result = st.session_state.solution[1]
+    badges([(model.kind.title(), "blue"), (case, ""), ("Solved", "green")])
+    toolbar = st.columns(4)
+    toolbar[0].text_input("Model", model.title, disabled=True)
+    toolbar[1].text_input("Case", result.case, disabled=True)
     selected = member_control(model)
     member = result.members[selected]
-    display_units = st.selectbox("Result display units", list(UNITS), index=1, help=help_text("si"))
+    with toolbar[2]:
+        st.text_input("Selected member", selected, disabled=True)
+    with toolbar[3]:
+        display_units = st.selectbox("Display units", list(UNITS), index=1, help=help_text("si"))
     unit, factor = ("m", 1) if display_units == "N-m-Pa" else ("mm", 1000)
     translational = [i for i, label in enumerate(result.labels) if not label.endswith(":rz")]
-    a, b, c, d = st.columns(4)
-    a.metric(
-        "Peak nodal translation",
-        f"{max(abs(result.displacements[translational])) * factor:.5g} {unit}",
-        help="Largest absolute translation component at a node, not vector magnitude.",
-    )
-    b.metric("Degrees of freedom", str(len(result.labels)), help=help_text("dof"))
-    c.metric(
-        "Strain energy", f"{result.diagnostics['strain_energy_J']:.4g} J", help=help_text("energy")
-    )
-    d.metric(
-        "Scaled residual",
-        f"{result.diagnostics['scaled_backward_error']:.1e}",
-        help=help_text("residual"),
+    metric_cards(
+        [
+            (
+                "Peak nodal translation",
+                f"{max(abs(result.displacements[translational])) * factor:.8g} {unit}",
+                "Largest absolute translation component",
+            ),
+            ("Degrees of freedom", str(len(result.labels)), "Solved structure movements"),
+            (
+                "Strain energy",
+                f"{result.diagnostics['strain_energy_J']:.8g} J",
+                "Elastic energy stored by the model",
+            ),
+            (
+                "Scaled residual",
+                f"{result.diagnostics['scaled_backward_error']:.6e}",
+                "Equation imbalance after scaling",
+            ),
+        ],
+        "Primary results",
     )
     term_key(
         "translation",
@@ -659,16 +761,25 @@ def solve_view():
         "sagging",
         "fiber",
     )
-    magnification = st.slider(
-        "Deformation magnification", 0, 500, 50, 5, help=help_text("magnification")
+    figure_controls = st.columns([1, 1, 2])
+    with figure_controls[0]:
+        magnification = st.slider(
+            "Deformation magnification", 0, 500, 50, 5, help=help_text("magnification")
+        )
+    with figure_controls[1]:
+        color = st.selectbox(
+            "Color field", ["Deformed shape", "Normal stress"], help=help_text("stress")
+        )
+    with figure_controls[2]:
+        st.caption(
+            "Dotted geometry is the original shape. Equal axis scales preserve structural proportions."
+        )
+    fig = apply_plot_theme(
+        structure_figure(model, result, magnification, selected, color, display_units), 470
     )
-    color = st.selectbox(
-        "Color field", ["Deformed shape", "Normal stress"], help=help_text("stress")
-    )
-    fig = structure_figure(model, result, magnification, selected, color, display_units)
-    st.plotly_chart(fig, width="stretch", key="structure")
-    explain(
-        f"Deformed geometry ×{magnification}. Dotted lines show original geometry; axes have equal scales. Stress coloring uses top fiber stress when c is supplied, otherwise axial stress only. Tension is positive. The drawing is not a continuum stress contour."
+    st.plotly_chart(fig, width="stretch", key="structure", config=PLOT_CONFIG)
+    st.caption(
+        f"Deformed geometry ×{magnification}. Tension is positive. Stress color is a line-element result, not a continuum stress contour."
     )
     quantities = (
         ["axial_force", "axial_stress"]
@@ -683,39 +794,30 @@ def solve_view():
         index=2 if model.kind in ("beam", "frame") else 0,
         format_func=lambda name: member_quantity(name, display_units)[0],
     )
-    left, right = st.columns(2)
-    with left:
-        st.plotly_chart(member_figure(member, quantity, display_units), width="stretch")
-    with right:
-        st.subheader("Node movements and support reactions")
-        table = pd.read_csv(io.StringIO(results_csv(result, display_units)))
-        st.dataframe(
-            table,
-            hide_index=True,
-            column_config={
-                "degree_of_freedom": st.column_config.TextColumn(help=help_text("dof")),
-                "displacement": st.column_config.NumberColumn(help=help_text("displacement")),
-                "constraint_reaction": st.column_config.NumberColumn(help=help_text("reaction")),
-                "spring_reaction": st.column_config.NumberColumn(help=help_text("spring")),
-            },
+    section_title("Selected-member insight", "Member " + selected)
+    insight, diagram = st.columns([0.72, 1.5])
+    with insight:
+        sampled = np.asarray(member[quantity])
+        quantity_title, quantity_unit, quantity_factor = member_quantity(quantity, display_units)
+        metric_cards(
+            [
+                ("Minimum", f"{sampled.min() * quantity_factor:.7g}", quantity_unit),
+                ("Maximum", f"{sampled.max() * quantity_factor:.7g}", quantity_unit),
+            ],
+            "Selected-member sampled range",
         )
-        readable_table(table, "Node movements and reactions")
+        st.caption(
+            "These values are sampled along the member. They are not claimed as exact interior extrema."
+        )
+    with diagram:
+        member_fig = apply_plot_theme(member_figure(member, quantity, display_units), 340)
+        st.plotly_chart(member_fig, width="stretch", config=PLOT_CONFIG)
+
     sampled_rows = [row for row in member_summary(model, result) if row["Member"] == selected]
-    readable_table(pd.DataFrame(sampled_rows), "Selected member sampled ranges (SI)")
     brief = current_brief()
     # Inspection selection controls which member is discussed; saved learning target stays unchanged.
     discussion_brief = ProblemBrief(**(asdict(brief) | {"target_member": selected}))
     discussion = discuss(model, result, discussion_brief)
-    st.subheader("What the result means")
-    if brief.prediction:
-        st.write("Your prediction: " + brief.prediction)
-    explain(
-        "The discussion below uses SI so its values can be compared directly with the equations. Plot and table display units are shown separately."
-    )
-    for observation in discussion.observations:
-        explain(observation)
-    st.subheader("Check the calculation")
-    term_key("equilibrium", "energy", "eigenvalue", "conditioning")
     check_table = pd.DataFrame(
         [
             {
@@ -728,38 +830,83 @@ def solve_view():
             for v in discussion.checks
         ]
     )
-    st.dataframe(check_table, hide_index=True)
-    readable_table(check_table, "Force, moment and energy checks")
-    if any(not v.passed for v in discussion.checks):
-        st.error(
-            "A balance check failed. Do not use these results without investigating the model and calculation."
-        )
-    for note in result.warnings:
-        st.warning(note)
-    with st.expander("Numerical diagnostics"):
+    table = pd.read_csv(io.StringIO(results_csv(result, display_units)))
+    movements = table[["degree_of_freedom", "displacement", "displacement_unit"]]
+    reactions = table[
+        ["degree_of_freedom", "constraint_reaction", "spring_reaction", "reaction_unit"]
+    ]
+    result_tabs = st.tabs(["Movements", "Reactions", "Member results", "Checks"])
+    with result_tabs[0]:
+        st.dataframe(movements, hide_index=True, width="stretch")
+        readable_table(movements, "Node movements")
+    with result_tabs[1]:
+        st.dataframe(reactions, hide_index=True, width="stretch")
+        readable_table(reactions, "Support and spring reactions")
+    with result_tabs[2]:
+        member_frame = pd.DataFrame(sampled_rows)
+        st.dataframe(member_frame, hide_index=True, width="stretch")
+        readable_table(member_frame, "Selected member sampled ranges (SI)")
+    with result_tabs[3]:
+        term_key("equilibrium", "energy", "eigenvalue", "conditioning")
+        st.dataframe(check_table, hide_index=True, width="stretch")
+        readable_table(check_table, "Force, moment and energy checks")
         meanings = {
             "dofs": help_text("dof"),
             "free_dofs": help_text("free"),
             "smallest_scaled_eigenvalue": help_text("eigenvalue"),
             "scaled_backward_error": help_text("residual"),
             "strain_energy_J": help_text("energy"),
-            "constraint_work_term_J": "Work term from prescribed support movements; included in the energy identity.",
+            "constraint_work_term_J": "Work from prescribed support movements in the energy identity.",
         }
-        st.table(
-            pd.DataFrame(
-                [
-                    {
-                        "Quantity": key.replace("_", " "),
-                        "Value": str(value),
-                        "Meaning": meanings.get(key, "See the numerical methods guide."),
-                    }
-                    for key, value in result.diagnostics.items()
-                ]
+        with st.expander("Numerical diagnostics"):
+            st.table(
+                pd.DataFrame(
+                    [
+                        {
+                            "Quantity": key.replace("_", " "),
+                            "Value": str(value),
+                            "Meaning": meanings.get(key, "See the numerical methods guide."),
+                        }
+                        for key, value in result.diagnostics.items()
+                    ]
+                )
             )
-        )
-    st.subheader("Limitations and next investigations")
-    for note in discussion.limitations + discussion.next_steps:
-        explain(note)
+
+    section_title("Discuss the result", "Meanings, checks and limits are kept separate")
+    interpretation, calculation, limits = st.columns(3)
+    with interpretation:
+        with st.container(border=True):
+            st.markdown("#### Interpretation")
+            if brief.prediction:
+                st.write("**Your prediction:** " + brief.prediction)
+            for observation in discussion.observations:
+                explain(observation)
+    with calculation:
+        with st.container(border=True):
+            st.markdown("#### Calculation checks")
+            if all(value.passed for value in discussion.checks):
+                status_message(
+                    "Equation checks passed",
+                    "The reported force, moment and energy imbalances are within their tolerances.",
+                )
+            else:
+                status_message(
+                    "A calculation check failed",
+                    "Investigate the model and calculation before using this result.",
+                    "error",
+                )
+            explain(
+                "A small residual checks the equations. It does not prove that the model represents the real structure."
+            )
+            for note in result.warnings:
+                st.warning(note)
+    with limits:
+        with st.container(border=True):
+            st.markdown("#### Limits and next steps")
+            for note in discussion.limitations + discussion.next_steps:
+                explain(note)
+
+    section_title("Change one thing and compare", "The solved baseline remains unchanged")
     comparison = comparison_controls(model, result)
     with st.expander("Save this calculation and explanation"):
         st.download_button(
