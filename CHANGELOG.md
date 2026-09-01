@@ -2,6 +2,10 @@
 
 [Project home](README.md) · [Milestones](docs/09-project-records/milestones.md) · [Evidence status](docs/07-testing-and-evidence/evidence-status.md)
 
+## 2026-09-01: public repository preparation
+
+Committed the reviewed 117-file source set with the owner's verified public GitHub identity and published it at [md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver). Added repository metadata, public citation details, topics and private vulnerability reporting. Physical validation and another person's reproduction remain pending.
+
 ## 2026-08-31: acceptance audit and readable outputs
 
 Added a requirement-by-requirement audit and a manual accessibility checklist. Added read-only HTML table alternatives for model data, matrices, results, comparisons and study outputs. Tables have captions, column headers, declared units and small-number formatting.
@@ -32,4 +36,4 @@ Added bar, truss, Euler–Bernoulli beam and 2D frame calculations, sparse assem
 
 Added the local app, exports, repeatable synthetic study, separate reference comparisons and preparation for real measurements.
 
-Physical validation, another person's reproduction and public release remain separate pending tasks.
+Physical validation and another person's reproduction remain separate pending tasks. Public repository status is recorded in the release guide.

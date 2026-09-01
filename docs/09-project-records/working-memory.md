@@ -37,7 +37,7 @@ Native term disclosures support focus and activation. Full keyboard-only, screen
 
 ## Current boundaries
 
-No real measurements, another person's reproduction or public GitHub release are recorded. Git is initialized locally on main with no invented author commit or remote.
+No real measurements or another person's reproduction are recorded. The reviewed source is published in the owner's [public GitHub repository](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver) on the main branch. Private vulnerability reporting is enabled. Publication does not add physical or independent evidence.
 
 The full 2,304-configuration synthetic study was regenerated from the current source on 2026-09-01. This updated a source fingerprint and did not create measured evidence.
 

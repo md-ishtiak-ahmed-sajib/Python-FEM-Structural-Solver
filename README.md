@@ -262,7 +262,7 @@ The study has 2,304 configurations and 200 planned trials per configuration. It 
 | Synthetic study completed | Results come from equations, with saved settings |
 | Physical validation pending | No real beam-test agreement is claimed |
 | External reproduction pending | No run by another person is recorded |
-| Public GitHub release pending | The project is prepared locally, not published |
+| Public GitHub repository | [Source, issues and releases are available on GitHub](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver) |
 
 Read the [check record](reports/verification/software_checks.json), [research report](docs/05-research-and-experiments/research-report.md) and [full evidence explanation](docs/07-testing-and-evidence/evidence-status.md).
 

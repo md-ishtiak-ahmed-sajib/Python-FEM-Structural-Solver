@@ -33,13 +33,13 @@ Use the real public author details. Remove credentials, private metadata, unnece
 
 Check that synthetic figures still say synthetic. Keep physical validation and another person's reproduction pending until evidence exists.
 
-## Publish only to the owner's chosen destination
+## Owner's public destination
 
-The intended name is Python-FEM-Structural-Solver. No remote account or URL is invented.
+The owner selected [md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver). The reviewed source was committed with the public account identity and pushed to its main branch. Issues are enabled, the wiki is disabled and private vulnerability reporting is enabled.
 
-When the owner chooses the destination, create the repository, review staged files, commit with correct attribution, add the actual remote and push. Configure private security reporting and inspect CI results before tagging a tested release.
+The package version is 0.1.0. Inspect the repository's Actions and Releases pages for the current remote check and tag status. Create a version tag only after its exact commit passes CI.
 
-These actions have not been performed just because this guide exists.
+Publishing source does not prove that another person reproduced it. That evidence needs a separate run by another person.
 
 ## A simple project demonstration
 

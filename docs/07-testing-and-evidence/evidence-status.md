@@ -11,7 +11,7 @@ A result is useful only when its source and limits are clear. This page separate
 | Synthetic research | Full grid was run with saved settings and seed | Agreement with a real beam |
 | Physical validation | Importer, templates and protocol are ready; actual findings are pending | That a physical experiment took place |
 | External reproduction | No run by another person is recorded | Independent usability or reproducibility |
-| Public release | Source archive and local Git repository are prepared | That a GitHub repository has been published |
+| Public release | [Source is published on GitHub](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver) | Physical validation, independent reproduction or broad adoption |
 
 ## Where to inspect the evidence
 
