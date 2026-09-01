@@ -11,7 +11,7 @@ A result is useful only when its source and limits are clear. This page separate
 | Synthetic research | Full grid was run with saved settings and seed | Agreement with a real beam |
 | Physical validation | Importer, templates and protocol are ready; actual findings are pending | That a physical experiment took place |
 | External reproduction | No run by another person is recorded | Independent usability or reproducibility |
-| Public release | [v0.1.0 source and artifacts are published on GitHub](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/releases/tag/v0.1.0) after [clean Windows, Ubuntu and OpenSees jobs](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/actions/runs/33455041150) | Physical validation, independent reproduction or broad adoption |
+| Public release | [v0.2.0 source and artifacts are published on GitHub](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/releases/tag/v0.2.0) after [clean Windows, Ubuntu and OpenSees jobs](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/actions/runs/33475674805) | Physical validation, independent reproduction or broad adoption |
 
 ## Where to inspect the evidence
 
@@ -24,7 +24,7 @@ A result is useful only when its source and limits are clear. This page separate
 - [Full synthetic summary table](../../reports/synthetic/summary.csv).
 - [Readable research report](../05-research-and-experiments/research-report.md).
 
-The original suite had 52 tests; the learning upgrade brings the suite to 81 passing tests. Browser checks found and fixed a hover-display issue and overlapping definitions. Full keyboard-only, screen-reader and physical touchscreen reviews remain pending. No full OS network-outage test is claimed.
+The current engineering-studio suite has 90 passing tests. Browser checks found and fixed interaction, layout and stale-state issues during development. Full keyboard-only, screen-reader and physical touchscreen reviews remain pending. No full OS network-outage test is claimed.
 
 The full study was regenerated from the current source on 2026-09-01. It has 2,304 configurations with 200 planned trials each. Of those configurations, 192 are unidentifiable; 422,400 trials receive estimates. These remain synthetic calculations, not physical validation.
 

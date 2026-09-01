@@ -29,5 +29,5 @@
   ],
   "physical_validation": "pending actual measurements",
   "external_reproduction": "not recorded",
-  "public_release": "v0.2.0 pending clean Windows, Ubuntu and independent OpenSees jobs"
+  "public_release": "v0.2.0 published after clean Windows, Ubuntu and independent OpenSees jobs: https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/releases/tag/v0.2.0"
 }

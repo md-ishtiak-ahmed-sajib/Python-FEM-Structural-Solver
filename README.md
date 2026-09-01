@@ -2,7 +2,7 @@
 
 **Learn how a structure becomes a set of equations, solve it on your own PC, and check the answer.**
 
-[Public source repository](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver) · [v0.1.0 release](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/releases/tag/v0.1.0) · [Installation](docs/02-getting-started/installation.md) · [Evidence and limits](docs/07-testing-and-evidence/evidence-status.md)
+[Public source repository](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver) · [v0.2.0 release](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/releases/tag/v0.2.0) · [Installation](docs/02-getting-started/installation.md) · [Evidence and limits](docs/07-testing-and-evidence/evidence-status.md)
 
 This Python project solves 1D bars, 2D trusses, Euler–Bernoulli beams and 2D frames. It shows movements, support reactions, member forces and normal stresses. You can inspect the calculation rather than seeing only a final number.
 
@@ -252,7 +252,7 @@ Installation needs internet. Normal calculations and exports use local files aft
 
 ## What has been checked?
 
-The current suite has **81 passing tests**, including guided workflows for all four element families. The shared glossary has **99 plain-English terms**. The project also includes OpenSees comparisons, a separate wheel-installation check and the full synthetic study. Read the [check scope](docs/07-testing-and-evidence/evidence-status.md) before interpreting these records.
+The current suite has **90 passing tests**, including guided workflows for all four element families. The shared glossary has **99 plain-English terms**. The project also includes OpenSees comparisons, a separate wheel-installation check and the full synthetic study. Read the [check scope](docs/07-testing-and-evidence/evidence-status.md) before interpreting these records.
 
 The study has 2,304 configurations and 200 planned trials per configuration. It reports insufficient-information cases instead of inventing unique estimates.
 
@@ -262,7 +262,7 @@ The study has 2,304 configurations and 200 planned trials per configuration. It 
 | Synthetic study completed | Results come from equations, with saved settings |
 | Physical validation pending | No real beam-test agreement is claimed |
 | External reproduction pending | No run by another person is recorded |
-| Public GitHub repository and v0.1.0 | [Source and checked release artifacts are available on GitHub](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/releases/tag/v0.1.0) |
+| Public GitHub repository and v0.2.0 | [Source and checked release artifacts are available on GitHub](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/releases/tag/v0.2.0) |
 
 Read the [check record](reports/verification/software_checks.json), [research report](docs/05-research-and-experiments/research-report.md) and [full evidence explanation](docs/07-testing-and-evidence/evidence-status.md).
 

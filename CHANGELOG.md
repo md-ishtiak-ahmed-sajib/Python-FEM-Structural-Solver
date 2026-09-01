@@ -8,7 +8,7 @@ Added a permanent Home launchpad with original Bar, Truss, Beam and Frame diagra
 
 Replaced clipped Streamlit metrics with complete semantic result cards, large term strips with a compact Key terms control, and document-like result pages with progressive panels and result tabs. Added an explicit viewing range for one-dimensional geometry while preserving equal axis scales. No numerical interface, JSON format or solver equation changed.
 
-Learning and stiffness reports now share a responsive, self-contained engineering-studio design with a header, evidence label and table of contents. Added launchpad, navigation, stage, stale-state, metric, glossary and report tests. Browser review covers 1440, 1024, 760 and 390 pixel widths; screen-reader and physical touchscreen review remain pending. The v0.2.0 release stays pending until its Windows, Ubuntu and independent OpenSees jobs pass.
+Learning and stiffness reports now share a responsive, self-contained engineering-studio design with a header, evidence label and table of contents. Added launchpad, navigation, stage, stale-state, metric, glossary and report tests. Browser review covers 1440, 1024, 760 and 390 pixel widths; screen-reader and physical touchscreen review remain pending. The [v0.2.0 release](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/releases/tag/v0.2.0) was published after its exact commit passed [Windows, Ubuntu and independent OpenSees jobs](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/actions/runs/33475674805).
 
 ## 2026-09-01: public v0.1.0 release
 

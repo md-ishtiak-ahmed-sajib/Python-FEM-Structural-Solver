@@ -37,7 +37,7 @@ Check that synthetic figures still say synthetic. Keep physical validation and a
 
 The owner selected [md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver). The reviewed source was committed with the public account identity and pushed to its main branch. Issues are enabled, the wiki is disabled and private vulnerability reporting is enabled.
 
-The [v0.1.0 release](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/releases/tag/v0.1.0) was published after its exact commit passed the Windows, Ubuntu and independent OpenSees jobs. It includes the installable numerical-package wheel, the reviewed full-source archive and SHA-256 checksums.
+The current [v0.2.0 release](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/releases/tag/v0.2.0) was published after its exact commit passed [Windows, Ubuntu and independent OpenSees jobs](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/actions/runs/33475674805). It includes the installable numerical-package wheel, source distribution, reviewed full-source archive and SHA-256 checksums. The earlier [v0.1.0 release](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/releases/tag/v0.1.0) remains available as the first public version.
 
 Publishing source does not prove that another person reproduced it. That evidence needs a separate run by another person.
 

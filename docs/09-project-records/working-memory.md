@@ -39,7 +39,7 @@ Native term disclosures support focus and activation. Full keyboard-only, screen
 
 ## Current boundaries
 
-No real measurements or another person's reproduction are recorded. The reviewed v0.1.0 source remains published in the owner's [public GitHub repository](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver). The v0.2.0 redesign is implemented locally but is not yet recorded as published; its release requires clean Windows, Ubuntu and independent OpenSees jobs. Publication does not add physical or independent evidence.
+No real measurements or another person's reproduction are recorded. The reviewed [v0.2.0 source and artifacts](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/releases/tag/v0.2.0) are published in the owner's public GitHub repository. The tagged commit passed [Windows, Ubuntu and independent OpenSees jobs](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/actions/runs/33475674805). Publication does not add physical or independent evidence.
 
 The full 2,304-configuration synthetic study was regenerated from the current source on 2026-09-01. This updated a source fingerprint and did not create measured evidence.
 
