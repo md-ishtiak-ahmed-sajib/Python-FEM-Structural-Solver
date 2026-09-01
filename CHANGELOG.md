@@ -2,9 +2,9 @@
 
 [Project home](README.md) · [Milestones](docs/09-project-records/milestones.md) · [Evidence status](docs/07-testing-and-evidence/evidence-status.md)
 
-## 2026-09-01: public repository preparation
+## 2026-09-01: public v0.1.0 release
 
-Committed the reviewed 117-file source set with the owner's verified public GitHub identity and published it at [md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver). Added repository metadata, public citation details, topics and private vulnerability reporting. Updated the workflow to the current Node 24 action generation after the first clean remote run reported a deprecation warning. Physical validation and another person's reproduction remain pending.
+Committed the reviewed 117-file source set with the owner's verified public GitHub identity and published it at [md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver). Added repository metadata, public citation details, topics and private vulnerability reporting. Updated the workflow to the current Node 24 action generation after the first clean remote run reported a deprecation warning. The clean Windows, Ubuntu and OpenSees jobs then passed, and [v0.1.0](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/releases/tag/v0.1.0) was published with the wheel, source archive and checksums. Physical validation and another person's reproduction remain pending.
 
 ## 2026-08-31: acceptance audit and readable outputs
 

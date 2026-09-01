@@ -37,7 +37,7 @@ Check that synthetic figures still say synthetic. Keep physical validation and a
 
 The owner selected [md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver). The reviewed source was committed with the public account identity and pushed to its main branch. Issues are enabled, the wiki is disabled and private vulnerability reporting is enabled.
 
-The package version is 0.1.0. Inspect the repository's Actions and Releases pages for the current remote check and tag status. Create a version tag only after its exact commit passes CI.
+The [v0.1.0 release](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/releases/tag/v0.1.0) was published after its exact commit passed the Windows, Ubuntu and independent OpenSees jobs. It includes the installable numerical-package wheel, the reviewed full-source archive and SHA-256 checksums.
 
 Publishing source does not prove that another person reproduced it. That evidence needs a separate run by another person.
 

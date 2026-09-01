@@ -19,7 +19,7 @@
 | F-010 | Real-measurement import and reporting | Complete | File and metadata validation; empty templates rejected |
 | F-011 | Physical validation | Pending | Real equipment, calibration and observations are needed |
 | F-012 | Another person's reproduction | Pending | No independent user run is claimed |
-| F-013 | Public GitHub repository | Complete | [Public source repository](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver), reviewed attribution and security reporting |
+| F-013 | Public GitHub repository and release | Complete | [v0.1.0 release](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/releases/tag/v0.1.0), reviewed attribution and security reporting |
 | F-014 | Define, Understand, Solve learning route | Implemented and locally checked | All four family workflows; no hidden solve; draft and stale-result tests |
 | F-015 | Shared terminology help and glossary | Implemented; broader accessibility review pending | 99 shared terms; browser hover, focus, pointer activation and narrow-window checks |
 | F-016 | One-change comparisons | Complete for checked cases | Baseline preservation, load/property changes and visible mechanism failures |

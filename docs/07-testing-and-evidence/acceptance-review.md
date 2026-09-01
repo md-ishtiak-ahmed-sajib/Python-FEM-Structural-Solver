@@ -36,6 +36,7 @@ This page compares the accepted plan with the actual software. **Implemented** m
 | Bench importer, protocol and reports | Implemented; empty templates are rejected; physical findings remain pending |
 | Runtime offline behavior | All four guided family workflows, comparisons, study and glossary tested with Python network access blocked |
 | Source/wheel installation and packaging | Release script plus separate wheel-installation checks; see current records |
+| Public repository and versioned artifacts | [v0.1.0](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver/releases/tag/v0.1.0) contains the wheel, reviewed source archive and SHA-256 checksums after clean remote jobs |
 
 Read [verification](verification.md) for commands, tolerances and test scope. The [current evidence page](evidence-status.md) separates numerical checks, physical validation, independent reproduction and release.
 
