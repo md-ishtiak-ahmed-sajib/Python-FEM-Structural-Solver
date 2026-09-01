@@ -4,7 +4,7 @@
 
 ## 2026-09-01: public repository preparation
 
-Committed the reviewed 117-file source set with the owner's verified public GitHub identity and published it at [md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver). Added repository metadata, public citation details, topics and private vulnerability reporting. Physical validation and another person's reproduction remain pending.
+Committed the reviewed 117-file source set with the owner's verified public GitHub identity and published it at [md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver](https://github.com/md-ishtiak-ahmed-sajib/Python-FEM-Structural-Solver). Added repository metadata, public citation details, topics and private vulnerability reporting. Updated the workflow to the current Node 24 action generation after the first clean remote run reported a deprecation warning. Physical validation and another person's reproduction remain pending.
 
 ## 2026-08-31: acceptance audit and readable outputs
 
